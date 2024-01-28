@@ -1,6 +1,8 @@
 package menu;
 
+import models.Admins;
 import models.Users;
+import service.AdminService;
 import service.UserService;
 import utility.ApplicationContext;
 import utility.Validation;
@@ -14,6 +16,7 @@ public class Menu {
     private final Scanner sc = new Scanner(System.in);
 
     UserService userService = ApplicationContext.getUserServiceImpel();
+    AdminService adminService = ApplicationContext.getAdminServiceImpel();
 
     public int getNumberFromUser(){
         int num = 0;
@@ -74,7 +77,7 @@ public class Menu {
         }
         switch (startMenu){
             case 1 -> saveUser();
-            case 2 -> logIn();
+            case 2 -> logInUser();
             case 3 -> adminLogIn();
         }
     }
@@ -99,14 +102,14 @@ public class Menu {
         if (sve != 0) {
             System.out.println("welcome to the shop");
             System.out.println("now plz log in");
-            logIn();
+            logInUser();
         }
         else {
             System.out.println("something wrong plz try again");
             saveUser();
         }
     }
-    public void logIn(){
+    public void logInUser(){
         System.out.println("plz enter your username");
         String username = getStringFromUser();
         System.out.println("plz enter your password");
@@ -123,15 +126,35 @@ public class Menu {
         }
         else {
             System.out.println("wrong username or password");
-            logIn();
+            logInUser();
         }
 
     }
     public void adminLogIn(){
-        System.out.println("hi admin");
+        System.out.println("plz enter your username");
+        String username = getStringFromUser();
+        System.out.println("plz enter your password");
+        String password = getStringFromUser();
+
+        Admins admin = null;
+        try {
+         admin = adminService.logIn(username,password);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if(admin != null){
+            System.out.println("welcome admin " + admin.getName());
+            adminBodyMenu();
+        }
+        else {
+            System.out.println("wrong username or password");
+            adminLogIn();
+        }
     }
     public void userBodyMenu(){
         System.out.println("by");
     }
-
+    public void adminBodyMenu(){
+        System.out.println("edit");
+    }
 }
