@@ -11,3 +11,7 @@ CREATE TABLE IF NOT EXISTS admins(
     admin_username VARCHAR(255) UNIQUE NOT NULL ,
     admin_password VARCHAR(255) NOT NULL
 );
+CREATE TABLE IF NOT EXISTS branch(
+    branch_id SERIAL PRIMARY KEY ,
+    branch_name VARCHAR(255) UNIQUE NOT NULL
+);
