@@ -18,11 +18,11 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     }
 
     @Override
-    public void save(TYPE type) throws SQLException {
+    public int save(TYPE type) throws SQLException {
         String sql = "INSERT INTO " + getTableName() + " " + getColumnsName() + " VALUES " + getCountOfQuestionMarkParams();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
             fillParamForStatement(preparedStatement, type, false);
-            preparedStatement.executeUpdate();
+            return  preparedStatement.executeUpdate();
         }
     }
 
@@ -39,20 +39,20 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     }
 
     @Override
-    public void update(TYPE type) throws SQLException {
+    public int update(TYPE type) throws SQLException {
         String sql = "UPDATE " + getTableName() + " SET " + getUpdateQueryParams() + " WHERE id = " + type.getId();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             fillParamForStatement(preparedStatement, type, true);
-            preparedStatement.executeUpdate();
+          return   preparedStatement.executeUpdate();
         }
     }
 
     @Override
-    public void delete(ID id) throws SQLException {
+    public int delete(ID id) throws SQLException {
         String sql = "DELETE FROM " + getTableName() + " WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, (Integer) id);
-            preparedStatement.executeUpdate();
+          return  preparedStatement.executeUpdate();
         }
     }
 
