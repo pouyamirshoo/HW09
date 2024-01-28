@@ -1,6 +1,5 @@
 package menu;
 
-import base.service.BaseService;
 import models.Admins;
 import models.Branch;
 import models.Users;
@@ -92,8 +91,7 @@ public class Menu {
         String username = getStringFromUser();
         String password = getPasswordFromUser();
         String email = getEmailFromUser();
-        Users user = new Users(name,username,password,email);
-        return user;
+        return new Users(name,username,password,email);
     }
     public void saveUser(){
         Users user = takeUserInfo();
@@ -180,6 +178,7 @@ public class Menu {
         }
         switch (chooseBranch){
             case 1 -> saveOneBranch();
+            case 2 -> editOneBranch();
         }
     }
     public void saveOneBranch(){
@@ -199,6 +198,42 @@ public class Menu {
         else {
             System.out.println("something wrong try again");
             branchMenu();
+        }
+    }
+    public void editOneBranch(){
+
+        showAllBranches();
+
+        System.out.println("plz enter the name of branch you want to edit");
+        String oldName = getStringFromUser();
+        System.out.println("plz enter the branch new name");
+        String newName = getStringFromUser();
+
+        int editName = 0;
+        try {
+           editName = branchService.editName(oldName,newName);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if(editName!=0){
+            System.out.println("name changed");
+            adminBodyMenu();
+        }
+        else {
+            System.out.println("wrong name,plz try again");
+            editOneBranch();
+        }
+    }
+    public void showAllBranches(){
+        Branch [] branches = null;
+
+        try {
+          branches =  branchService.showAllBranches();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        for (Branch branch : branches) {
+            System.out.println(branch.toString());
         }
     }
 }
