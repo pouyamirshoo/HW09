@@ -56,6 +56,16 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
           return  preparedStatement.executeUpdate();
         }
     }
+    public TYPE findByName(String name) throws SQLException {
+        String sql = "SELECT * FROM " + getTableName() + "WHERE " + getEditNameColumn() + " = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1,name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+                return mapResultSetToEntity(resultSet);
+        }
+        return null;
+    }
 
     @Override
     public int numOfArray() throws SQLException {
