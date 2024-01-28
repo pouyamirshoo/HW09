@@ -57,7 +57,7 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
         }
     }
     public TYPE findByName(String name) throws SQLException {
-        String sql = "SELECT * FROM " + getTableName() + "WHERE " + getEditNameColumn() + " = ?";
+        String sql = "SELECT * FROM " + getTableName() + " WHERE " + getEditNameColumn() + " = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1,name);
             ResultSet resultSet = preparedStatement.executeQuery();
