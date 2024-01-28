@@ -10,5 +10,6 @@ public interface BaseRepository<ID extends Serializable , TYPE extends BaseEntit
     TYPE findById(ID id) throws SQLException;
     int editName(int id , String newName) throws SQLException;
     int delete(ID id) throws SQLException;
+    int numOfArray() throws SQLException;
 
 }

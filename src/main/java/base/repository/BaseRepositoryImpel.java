@@ -1,7 +1,6 @@
 package base.repository;
 
 import base.model.BaseEntity;
-import models.Branch;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -57,6 +56,21 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
           return  preparedStatement.executeUpdate();
         }
     }
+
+    @Override
+    public int numOfArray() throws SQLException {
+        int numOfArray = 0;
+
+        String sql = "SELECT FROM " + getTableName();
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                numOfArray ++;
+            }
+        }
+        return numOfArray;
+    }
+
     public abstract String getTableName();
 
     public abstract String getColumnsName();
