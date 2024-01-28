@@ -57,9 +57,6 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
           return  preparedStatement.executeUpdate();
         }
     }
-
-    public abstract int editName(Branch branch) throws SQLException;
-
     public abstract String getTableName();
 
     public abstract String getColumnsName();

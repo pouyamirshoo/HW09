@@ -16,11 +16,6 @@ public class UserRepositoryImpel extends BaseRepositoryImpel<Integer, Users> imp
     }
 
     @Override
-    public int editName(Branch branch) throws SQLException {
-        return 0;
-    }
-
-    @Override
     public String getTableName() {
         return "users";
     }

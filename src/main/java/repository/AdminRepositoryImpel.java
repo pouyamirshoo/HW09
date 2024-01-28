@@ -2,6 +2,7 @@ package repository;
 
 import base.repository.BaseRepositoryImpel;
 import models.Admins;
+import models.Branch;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
