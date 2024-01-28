@@ -16,7 +16,7 @@ public class AdminRepositoryImpel extends BaseRepositoryImpel<Integer, Admins> i
 
     @Override
     public String getTableName() {
-        return null;
+        return "admins";
     }
 
     @Override
@@ -36,7 +36,13 @@ public class AdminRepositoryImpel extends BaseRepositoryImpel<Integer, Admins> i
 
     @Override
     public Admins mapResultSetToEntity(ResultSet resultSet) throws SQLException {
-        return null;
+
+        Admins admin = new Admins();
+        admin.setId(resultSet.getInt("admin_id"));
+        admin.setName(resultSet.getString("admin_name"));
+        admin.setUsername(resultSet.getString("admin_username"));
+        admin.setPassword(resultSet.getString("admin_password"));
+        return admin;
     }
 
     @Override
