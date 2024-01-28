@@ -31,7 +31,7 @@ public class BaseServiceImpel<ID extends Serializable, TYPE extends BaseEntity<I
     }
 
     @Override
-    public int delete(ID id) throws SQLException {
-       return repository.delete(id);
+    public int delete(String name) throws SQLException {
+       return repository.delete(name);
     }
 }

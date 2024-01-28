@@ -9,7 +9,7 @@ public interface BaseRepository<ID extends Serializable , TYPE extends BaseEntit
     int save (TYPE type) throws SQLException;
     TYPE findById(ID id) throws SQLException;
     int editName(String oldName , String newName) throws SQLException;
-    int delete(ID id) throws SQLException;
+    int delete(String name) throws SQLException;
     int numOfArray() throws SQLException;
 
 }

@@ -49,10 +49,10 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     }
 
     @Override
-    public int delete(ID id) throws SQLException {
-        String sql = "DELETE FROM " + getTableName() + " WHERE id = ?";
+    public int delete(String name) throws SQLException {
+        String sql = "DELETE FROM " + getTableName() + " WHERE " + getEditNameColumn() + " = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, (Integer) id);
+            preparedStatement.setString(1, name);
           return  preparedStatement.executeUpdate();
         }
     }
