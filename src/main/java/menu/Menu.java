@@ -1,8 +1,11 @@
 package menu;
 
+import base.service.BaseService;
 import models.Admins;
+import models.Branch;
 import models.Users;
 import service.AdminService;
+import service.BranchService;
 import service.UserService;
 import utility.ApplicationContext;
 import utility.Validation;
@@ -17,6 +20,7 @@ public class Menu {
 
     UserService userService = ApplicationContext.getUserServiceImpel();
     AdminService adminService = ApplicationContext.getAdminServiceImpel();
+    BranchService branchService = ApplicationContext.getBranchServiceImpel();
 
     public int getNumberFromUser(){
         int num = 0;
@@ -155,6 +159,46 @@ public class Menu {
         System.out.println("by");
     }
     public void adminBodyMenu(){
-        System.out.println("edit");
+        System.out.println("press 1 to asses branch menu");
+        int chooseAdmin = getNumberFromUser();
+        if (chooseAdmin > 3 || chooseAdmin < 1){
+            System.out.println("plz enter valid number");
+            adminBodyMenu();
+        }
+        switch (chooseAdmin){
+            case 1 -> branchMenu();
+        }
+    }
+    public void branchMenu(){
+        System.out.println("press 1 to add one branch");
+        System.out.println("press 2 to edit one branch");
+        System.out.println("press 3 to delete one branch");
+        int chooseBranch = getNumberFromUser();
+        if (chooseBranch > 3 || chooseBranch < 1){
+            System.out.println("plz enter valid number");
+            branchMenu();
+        }
+        switch (chooseBranch){
+            case 1 -> saveOneBranch();
+        }
+    }
+    public void saveOneBranch(){
+        System.out.println("plz enter the branch name");
+        String name = getStringFromUser();
+        Branch branch = new Branch(name);
+        int saveBranch = 0;
+        try {
+            saveBranch = branchService.save(branch);
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if(saveBranch != 0){
+            System.out.println("branch saved");
+            adminBodyMenu();
+        }
+        else {
+            System.out.println("something wrong try again");
+            branchMenu();
+        }
     }
 }
