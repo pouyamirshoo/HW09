@@ -14,4 +14,5 @@ public interface BaseService<ID extends Serializable, Type extends BaseEntity<ID
     int editName(String oldName, String newName) throws SQLException;
 
     int delete(String name) throws SQLException;
+    Type findByName(String name) throws SQLException;
 }
