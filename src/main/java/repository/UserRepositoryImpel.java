@@ -1,6 +1,7 @@
 package repository;
 
 import base.repository.BaseRepositoryImpel;
+import models.Branch;
 import models.Users;
 
 import java.sql.Connection;
@@ -12,6 +13,11 @@ public class UserRepositoryImpel extends BaseRepositoryImpel<Integer, Users> imp
 
     public UserRepositoryImpel(Connection connection){
         super(connection);
+    }
+
+    @Override
+    public int editName(Branch branch) throws SQLException {
+        return 0;
     }
 
     @Override

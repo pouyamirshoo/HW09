@@ -1,6 +1,7 @@
 package base.repository;
 
 import base.model.BaseEntity;
+import models.Branch;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -39,10 +40,11 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     }
 
     @Override
-    public int editName(TYPE type) throws SQLException {
-        String sql = "UPDATE " + getTableName() + " SET " + getUpdateQueryParams() + " WHERE id = " + type.getId();
+    public int editName(int id,String newName) throws SQLException {
+        String sql = "UPDATE " + getTableName() + " SET " + getUpdateQueryParams() + "= ?" + " WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            fillParamForStatement(preparedStatement, type, true);
+            preparedStatement.setString(1,newName);
+            preparedStatement.setInt(2,id);
           return   preparedStatement.executeUpdate();
         }
     }
@@ -56,6 +58,8 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
         }
     }
 
+    public abstract int editName(Branch branch) throws SQLException;
+
     public abstract String getTableName();
 
     public abstract String getColumnsName();
@@ -63,7 +67,7 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     public abstract String getCountOfQuestionMarkParams();
 
     public abstract void fillParamForStatement(PreparedStatement preparedStatement,
-                                               TYPE type,
+                                               TYPE entity,
                                                boolean isCountOnly) throws SQLException;
 
     public abstract TYPE mapResultSetToEntity(ResultSet resultSet) throws SQLException;
