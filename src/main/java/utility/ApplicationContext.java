@@ -1,14 +1,8 @@
 package utility;
 
 import connection.DBConfig;
-import repository.AdminRepository;
-import repository.AdminRepositoryImpel;
-import repository.UserRepository;
-import repository.UserRepositoryImpel;
-import service.AdminService;
-import service.AdminServiceImpel;
-import service.UserService;
-import service.UserServiceImpel;
+import repository.*;
+import service.*;
 
 import java.sql.Connection;
 
@@ -18,10 +12,14 @@ public class ApplicationContext {
 
     private static final UserRepository USER_REPOSITORY;
     private static final AdminRepository ADMIN_REPOSITORY;
+    private static final BranchRepository BRANCH_REPOSITORY;
 
 
     private static final UserService USER_SERVICE;
     private static final AdminService ADMIN_SERVICE;
+    private static final BranchService BRANCH_SERVICE;
+
+
     static {
         CONNECTION = DBConfig.getConnection();
 
@@ -30,6 +28,9 @@ public class ApplicationContext {
 
         ADMIN_REPOSITORY = new AdminRepositoryImpel(CONNECTION);
         ADMIN_SERVICE = new AdminServiceImpel(ADMIN_REPOSITORY);
+
+        BRANCH_REPOSITORY = new BranchRepositoryImpel(CONNECTION);
+        BRANCH_SERVICE = new BranchServiceImpel(BRANCH_REPOSITORY);
     }
 
     public static UserService getUserServiceImpel() {
@@ -37,5 +38,8 @@ public class ApplicationContext {
     }
     public static AdminService getAdminServiceImpel(){
         return ADMIN_SERVICE;
+    }
+    public static BranchService getBranchService(){
+        return BRANCH_SERVICE;
     }
 }
