@@ -2,9 +2,11 @@ package menu;
 
 import models.Admins;
 import models.Branch;
+import models.SubBranch;
 import models.Users;
 import service.AdminService;
 import service.BranchService;
+import service.SubBranchService;
 import service.UserService;
 import utility.ApplicationContext;
 import utility.Validation;
@@ -20,6 +22,7 @@ public class Menu {
     UserService userService = ApplicationContext.getUserServiceImpel();
     AdminService adminService = ApplicationContext.getAdminServiceImpel();
     BranchService branchService = ApplicationContext.getBranchServiceImpel();
+    SubBranchService subBranchService = ApplicationContext.getSubBranchServiceImpel();
 
     public int getNumberFromUser(){
         int num = 0;
@@ -158,6 +161,7 @@ public class Menu {
     }
     public void adminBodyMenu(){
         System.out.println("press 1 to asses branch menu");
+        System.out.println("press 2 to asses sub branch menu");
         int chooseAdmin = getNumberFromUser();
         if (chooseAdmin > 3 || chooseAdmin < 1){
             System.out.println("plz enter valid number");
@@ -165,6 +169,7 @@ public class Menu {
         }
         switch (chooseAdmin){
             case 1 -> branchMenu();
+            case 2 -> subBranchMenu();
         }
     }
     public void branchMenu(){
@@ -182,6 +187,20 @@ public class Menu {
             case 2 -> editOneBranch();
             case 3 -> deleteOneBranch();
             case 4 -> adminBodyMenu();
+        }
+    }
+    public void subBranchMenu(){
+        System.out.println("press 1 to add one sub branch");
+        System.out.println("press 2 to edit one sub branch");
+        System.out.println("press 3 to delete one sub branch");
+        System.out.println("press 4 to back");
+        int chooseSubBranch = getNumberFromUser();
+        if (chooseSubBranch > 4 || chooseSubBranch < 1){
+            System.out.println("plz enter valid number");
+            subBranchMenu();
+        }
+        switch (chooseSubBranch){
+            case 1 -> saveOneSubBranch();
         }
     }
     public void saveOneBranch(){
@@ -259,6 +278,43 @@ public class Menu {
         else {
             System.out.println("wrong name,plz try again");
             deleteOneBranch();
+        }
+    }
+    public Branch loudOneBranch(){
+
+        showAllBranches();
+
+        System.out.println("plz enter the branch name");
+        String branchName = getStringFromUser();
+        Branch branch = new Branch();
+        try {
+            branch = branchService.findByName(branchName);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return branch;
+    }
+    public void saveOneSubBranch(){
+
+        System.out.println("plz enter the sub branch name");
+        String name = getStringFromUser();
+        Branch branch = loudOneBranch();
+
+        SubBranch subBranch = new SubBranch(name,branch);
+
+        int saveSubBranch = 0;
+        try {
+            saveSubBranch = subBranchService.save(subBranch);
+        }catch (SQLException ew){
+            System.out.println(ew.getMessage());
+        }
+        if(saveSubBranch != 0){
+            System.out.println("sub branch saved");
+            adminBodyMenu();
+        }
+        else {
+            System.out.println("something wrong try again");
+            branchMenu();
         }
     }
 }
