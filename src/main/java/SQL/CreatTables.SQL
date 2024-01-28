@@ -15,3 +15,8 @@ CREATE TABLE IF NOT EXISTS branch(
     branch_id SERIAL PRIMARY KEY ,
     branch_name VARCHAR(255) UNIQUE NOT NULL
 );
+CREATE TABLE IF NOT EXISTS subbranch(
+    subbranch_id SERIAL PRIMARY KEY ,
+    subbranch_name VARCHAR(255) UNIQUE NOT NULL ,
+    branch_id_fk INTEGER REFERENCES branch(branch_id)
+);
