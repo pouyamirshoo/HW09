@@ -39,7 +39,7 @@ public class ApplicationContext {
     public static AdminService getAdminServiceImpel(){
         return ADMIN_SERVICE;
     }
-    public static BranchService getBranchService(){
+    public static BranchService getBranchServiceImpel(){
         return BRANCH_SERVICE;
     }
 }
