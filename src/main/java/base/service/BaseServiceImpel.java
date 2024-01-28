@@ -16,8 +16,8 @@ public class BaseServiceImpel<ID extends Serializable, TYPE extends BaseEntity<I
     }
 
     @Override
-    public void save(TYPE entity) throws SQLException {
-        repository.save(entity);
+    public int save(TYPE entity) throws SQLException {
+       return repository.save(entity);
     }
 
     @Override
@@ -26,12 +26,12 @@ public class BaseServiceImpel<ID extends Serializable, TYPE extends BaseEntity<I
     }
 
     @Override
-    public void update(TYPE entity) throws SQLException {
-        repository.update(entity);
+    public int update(TYPE entity) throws SQLException {
+       return repository.update(entity);
     }
 
     @Override
-    public void delete(ID id) throws SQLException {
-        repository.delete(id);
+    public int delete(ID id) throws SQLException {
+       return repository.delete(id);
     }
 }
