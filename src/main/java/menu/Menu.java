@@ -171,14 +171,17 @@ public class Menu {
         System.out.println("press 1 to add one branch");
         System.out.println("press 2 to edit one branch");
         System.out.println("press 3 to delete one branch");
+        System.out.println("press 4 to back");
         int chooseBranch = getNumberFromUser();
-        if (chooseBranch > 3 || chooseBranch < 1){
+        if (chooseBranch > 4 || chooseBranch < 1){
             System.out.println("plz enter valid number");
             branchMenu();
         }
         switch (chooseBranch){
             case 1 -> saveOneBranch();
             case 2 -> editOneBranch();
+            case 3 -> deleteOneBranch();
+            case 4 -> adminBodyMenu();
         }
     }
     public void saveOneBranch(){
@@ -234,6 +237,28 @@ public class Menu {
         }
         for (Branch branch : branches) {
             System.out.println(branch.toString());
+        }
+    }
+    public void deleteOneBranch(){
+
+        showAllBranches();
+
+        System.out.println("plz enter the name of branch you want to delete");
+        String name = getStringFromUser();
+
+        int deleteBranch = 0;
+        try {
+            deleteBranch = branchService.delete(name);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if(deleteBranch!=0){
+            System.out.println("branch deleted");
+            adminBodyMenu();
+        }
+        else {
+            System.out.println("wrong name,plz try again");
+            deleteOneBranch();
         }
     }
 }
