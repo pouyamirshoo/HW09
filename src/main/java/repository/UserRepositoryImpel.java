@@ -40,7 +40,7 @@ public class UserRepositoryImpel extends BaseRepositoryImpel<Integer, Users> imp
     @Override
     public Users mapResultSetToEntity(ResultSet resultSet) throws SQLException {
         Users user = new Users();
-        user.setId(resultSet.getInt("id"));
+        user.setId(resultSet.getInt("user_id"));
         user.setFullName(resultSet.getString("user_name"));
         user.setUsername(resultSet.getString("user_username"));
         user.setPassword(resultSet.getString("user_password"));
