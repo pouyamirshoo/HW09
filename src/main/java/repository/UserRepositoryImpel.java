@@ -26,6 +26,11 @@ public class UserRepositoryImpel extends BaseRepositoryImpel<Integer, Users> imp
     }
 
     @Override
+    public String getEditNameColumn() {
+        return null;
+    }
+
+    @Override
     public String getCountOfQuestionMarkParams() {
         return "(?, ?, ?, ?)";
     }

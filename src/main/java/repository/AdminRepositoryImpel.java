@@ -26,6 +26,11 @@ public class AdminRepositoryImpel extends BaseRepositoryImpel<Integer, Admins> i
     }
 
     @Override
+    public String getEditNameColumn() {
+        return null;
+    }
+
+    @Override
     public String getCountOfQuestionMarkParams() {
         return null;
     }

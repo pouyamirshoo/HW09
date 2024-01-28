@@ -24,6 +24,11 @@ public class BranchRepositoryImpel extends BaseRepositoryImpel<Integer, Branch> 
     }
 
     @Override
+    public String getEditNameColumn() {
+        return "branch_name";
+    }
+
+    @Override
     public String getCountOfQuestionMarkParams() {
         return "(?)";
     }
@@ -45,7 +50,7 @@ public class BranchRepositoryImpel extends BaseRepositoryImpel<Integer, Branch> 
 
     @Override
     public String getUpdateQueryParams() {
-        return "branch_name = ?";
+        return "branch_name";
     }
 
     @Override
@@ -53,7 +58,7 @@ public class BranchRepositoryImpel extends BaseRepositoryImpel<Integer, Branch> 
         Branch [] branches = new Branch[numOfArray()];
         int i = 0;
 
-        String sql = "SELECT FROM" + getTableName();
+        String sql = "SELECT * FROM " + getTableName();
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){

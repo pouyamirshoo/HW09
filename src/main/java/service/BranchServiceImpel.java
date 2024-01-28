@@ -14,6 +14,6 @@ public class BranchServiceImpel extends BaseServiceImpel<Integer, Branch, Branch
 
     @Override
     public Branch[] showAllBranches() throws SQLException {
-        return new Branch[0];
+        return repository.showAllBranches();
     }
 }

@@ -26,8 +26,8 @@ public class BaseServiceImpel<ID extends Serializable, TYPE extends BaseEntity<I
     }
 
     @Override
-    public int editName(int id, String newName) throws SQLException {
-       return repository.editName(id, newName);
+    public int editName(String oldName, String newName) throws SQLException {
+       return repository.editName(oldName, newName);
     }
 
     @Override

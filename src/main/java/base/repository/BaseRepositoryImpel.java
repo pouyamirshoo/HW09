@@ -39,11 +39,11 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     }
 
     @Override
-    public int editName(int id,String newName) throws SQLException {
-        String sql = "UPDATE " + getTableName() + " SET " + getUpdateQueryParams() + "= ?" + " WHERE id = ?";
+    public int editName(String oldName,String newName) throws SQLException {
+        String sql = "UPDATE " + getTableName() + " SET " + getUpdateQueryParams() + "= ?" + " WHERE " + getEditNameColumn() + " = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1,newName);
-            preparedStatement.setInt(2,id);
+            preparedStatement.setString(2,oldName);
           return   preparedStatement.executeUpdate();
         }
     }
@@ -61,7 +61,7 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     public int numOfArray() throws SQLException {
         int numOfArray = 0;
 
-        String sql = "SELECT FROM " + getTableName();
+        String sql = "SELECT * FROM " + getTableName();
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
@@ -74,6 +74,7 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     public abstract String getTableName();
 
     public abstract String getColumnsName();
+    public abstract String getEditNameColumn();
 
     public abstract String getCountOfQuestionMarkParams();
 
