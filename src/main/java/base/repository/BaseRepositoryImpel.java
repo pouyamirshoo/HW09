@@ -39,7 +39,7 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     }
 
     @Override
-    public int update(TYPE type) throws SQLException {
+    public int editName(TYPE type) throws SQLException {
         String sql = "UPDATE " + getTableName() + " SET " + getUpdateQueryParams() + " WHERE id = " + type.getId();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             fillParamForStatement(preparedStatement, type, true);
