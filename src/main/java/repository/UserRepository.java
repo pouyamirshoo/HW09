@@ -7,5 +7,5 @@ import java.sql.SQLException;
 
 public interface UserRepository extends BaseRepository<Integer, Users> {
 
-    Users findByUsername(String username) throws SQLException;
+    Users logIn(String username,String password) throws SQLException;
 }
