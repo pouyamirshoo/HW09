@@ -1,0 +1,72 @@
+package base.repository;
+
+import base.model.BaseEntity;
+
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends BaseEntity<ID>>
+        implements BaseRepository<ID, TYPE> {
+
+    protected final Connection connection;
+
+    public BaseRepositoryImpel(Connection connection) {
+        this.connection = connection;
+    }
+
+    @Override
+    public void save(TYPE type) throws SQLException {
+        String sql = "INSERT INTO " + getTableName() + " " + getColumnsName() + " VALUES " + getCountOfQuestionMarkParams();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);) {
+            fillParamForStatement(preparedStatement, type, false);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    @Override
+    public TYPE findById(ID id) throws SQLException {
+        String sql = "SELECT * FROM " + getTableName() + " WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, (Integer) id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next())
+                return mapResultSetToEntity(resultSet);
+        }
+        return null;
+    }
+
+    @Override
+    public void update(TYPE type) throws SQLException {
+        String sql = "UPDATE " + getTableName() + " SET " + getUpdateQueryParams() + " WHERE id = " + type.getId();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            fillParamForStatement(preparedStatement, type, true);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    @Override
+    public void delete(ID id) throws SQLException {
+        String sql = "DELETE FROM " + getTableName() + " WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, (Integer) id);
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    public abstract String getTableName();
+
+    public abstract String getColumnsName();
+
+    public abstract String getCountOfQuestionMarkParams();
+
+    public abstract void fillParamForStatement(PreparedStatement preparedStatement,
+                                               TYPE type,
+                                               boolean isCountOnly) throws SQLException;
+
+    public abstract TYPE mapResultSetToEntity(ResultSet resultSet) throws SQLException;
+
+    public abstract String getUpdateQueryParams();
+}
