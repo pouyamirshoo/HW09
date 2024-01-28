@@ -26,8 +26,8 @@ public class BaseServiceImpel<ID extends Serializable, TYPE extends BaseEntity<I
     }
 
     @Override
-    public int update(TYPE entity) throws SQLException {
-       return repository.update(entity);
+    public int update(TYPE type) throws SQLException {
+       return repository.editName(type);
     }
 
     @Override
