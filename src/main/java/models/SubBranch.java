@@ -9,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString
 public class SubBranch extends BaseEntity<Integer> {
     String subBranchName;
     Branch branch;
@@ -18,5 +17,13 @@ public class SubBranch extends BaseEntity<Integer> {
         super(subBranchId);
         this.subBranchName = subBranchName;
         this.branch = branch;
+    }
+
+    @Override
+    public String toString() {
+        return "SubBranch{" +
+                "subBranchName='" + subBranchName + '\'' +
+                ", branch=" + branch.getId() +
+                '}';
     }
 }
