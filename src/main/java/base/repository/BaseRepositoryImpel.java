@@ -64,7 +64,7 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
     public abstract String getCountOfQuestionMarkParams();
 
     public abstract void fillParamForStatement(PreparedStatement preparedStatement,
-                                               TYPE entity,
+                                               TYPE type,
                                                boolean isCountOnly) throws SQLException;
 
     public abstract TYPE mapResultSetToEntity(ResultSet resultSet) throws SQLException;
