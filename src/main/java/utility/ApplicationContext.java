@@ -14,12 +14,14 @@ public class ApplicationContext {
     private static final AdminRepository ADMIN_REPOSITORY;
     private static final BranchRepository BRANCH_REPOSITORY;
     private static final SubBranchRepository SUB_BRANCH_REPOSITORY;
+    private static final ProductRepository PRODUCT_REPOSITORY;
 
 
     private static final UserService USER_SERVICE;
     private static final AdminService ADMIN_SERVICE;
     private static final BranchService BRANCH_SERVICE;
     private static final SubBranchService SUB_BRANCH_SERVICE;
+    private static final ProductService PRODUCT_SERVICE;
 
     static {
         CONNECTION = DBConfig.getConnection();
@@ -35,6 +37,9 @@ public class ApplicationContext {
 
         SUB_BRANCH_REPOSITORY = new SubBranchRepositoryImpel(CONNECTION);
         SUB_BRANCH_SERVICE = new SubBranchServiceImpel(SUB_BRANCH_REPOSITORY);
+
+        PRODUCT_REPOSITORY = new ProductRepositoryImpel(CONNECTION);
+        PRODUCT_SERVICE = new ProductServiceImpel(PRODUCT_REPOSITORY);
     }
 
     public static UserService getUserServiceImpel() {
@@ -48,5 +53,8 @@ public class ApplicationContext {
     }
     public static SubBranchService getSubBranchServiceImpel(){
         return SUB_BRANCH_SERVICE;
+    }
+    public static ProductService getProductServiceIMpel(){
+        return PRODUCT_SERVICE;
     }
 }
