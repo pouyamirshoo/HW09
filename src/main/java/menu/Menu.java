@@ -221,7 +221,7 @@ public class Menu {
         switch (chooseSubBranch) {
             case 1 -> saveOneSubBranch();
             case 2 -> editSubBranch();
-            case 3 -> deleteOneSubBranch();
+            case 3 -> deleteOneSubBranchFromInnerTable();
             case 4 -> adminBodyMenu();
         }
     }
@@ -451,13 +451,30 @@ public class Menu {
             editSubBranchBranch();
         }
     }
-
-    public void deleteOneSubBranch() {
+    public void deleteOneSubBranchFromInnerTable(){
 
         showAllSubBranches();
 
         System.out.println("plz enter the name of sub branch you want to delete");
         String name = getStringFromUser();
+
+        int id = 0;
+        try {
+            id = subBranchService.findByName(name).getId();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        try {
+             subBranchService.deleteFromInnerTable(id);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        deleteOneSubBranch(name);
+    }
+
+    public void deleteOneSubBranch(String name) {
+
+
 
         int deleteOneSubBranch = 0;
         try {
@@ -470,7 +487,7 @@ public class Menu {
             adminBodyMenu();
         } else {
             System.out.println("something wrong try again");
-            deleteOneSubBranch();
+            deleteOneSubBranchFromInnerTable();
         }
     }
 
