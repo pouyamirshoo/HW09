@@ -54,7 +54,7 @@ public class ApplicationContext {
     public static SubBranchService getSubBranchServiceImpel(){
         return SUB_BRANCH_SERVICE;
     }
-    public static ProductService getProductServiceIMpel(){
+    public static ProductService getProductServiceImpel(){
         return PRODUCT_SERVICE;
     }
 }
