@@ -229,6 +229,8 @@ public class Menu {
     public void productsMenu() {
         System.out.println("press 1 to add products");
         System.out.println("press 2 to edit one product");
+        System.out.println("press 3 to delete one product");
+        System.out.println("press 4 to back");
         int chooseProduct = getNumberFromUser();
         if (chooseProduct > 4 || chooseProduct < 1) {
             System.out.println("plz enter valid number");
@@ -237,6 +239,8 @@ public class Menu {
         switch (chooseProduct) {
             case 1 -> saveOneProduct();
             case 2 -> editProducts();
+            case 3 -> deleteOneProduct();
+            case 4 -> adminBodyMenu();
         }
     }
 
@@ -653,6 +657,26 @@ public class Menu {
         } else {
             System.out.println("something wrong try again");
             editProductSubBranch();
+        }
+    }
+    public void deleteOneProduct(){
+
+        showAllProducts();
+
+        System.out.println("plz enter the name of product you want to delete");
+        String name = getStringFromUser();
+        int deleteProduct = 0;
+        try {
+            deleteProduct = productService.delete(name);
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if (deleteProduct != 0) {
+            System.out.println("product deleted");
+            adminBodyMenu();
+        } else {
+            System.out.println("something wrong try again");
+            deleteOneProduct();
         }
     }
 }
