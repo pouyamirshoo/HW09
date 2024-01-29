@@ -1,13 +1,7 @@
 package menu;
 
-import models.Admins;
-import models.Branch;
-import models.SubBranch;
-import models.Users;
-import service.AdminService;
-import service.BranchService;
-import service.SubBranchService;
-import service.UserService;
+import models.*;
+import service.*;
 import utility.ApplicationContext;
 import utility.Validation;
 
@@ -24,11 +18,24 @@ public class Menu {
     AdminService adminService = ApplicationContext.getAdminServiceImpel();
     BranchService branchService = ApplicationContext.getBranchServiceImpel();
     SubBranchService subBranchService = ApplicationContext.getSubBranchServiceImpel();
+    ProductService productService = ApplicationContext.getProductServiceImpel();
 
     public int getNumberFromUser(){
         int num = 0;
         try {
          num =  sc.nextInt();
+        }catch (InputMismatchException e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            sc.nextLine();
+        }
+        return num;
+    }
+    public float getFloatFromUser(){
+        float num = 0;
+        try {
+         num =  sc.nextFloat();
         }catch (InputMismatchException e){
             System.out.println(e.getMessage());
         }
@@ -163,14 +170,18 @@ public class Menu {
     public void adminBodyMenu(){
         System.out.println("press 1 to asses branch menu");
         System.out.println("press 2 to asses sub branch menu");
+        System.out.println("press 3 to asses products menu");
+        System.out.println("press 4 to exit");
         int chooseAdmin = getNumberFromUser();
-        if (chooseAdmin > 3 || chooseAdmin < 1){
+        if (chooseAdmin > 4 || chooseAdmin < 1){
             System.out.println("plz enter valid number");
             adminBodyMenu();
         }
         switch (chooseAdmin){
             case 1 -> branchMenu();
             case 2 -> subBranchMenu();
+            case 3 -> productsMenu();
+            case 4 -> System.out.println("good by");
         }
     }
     public void branchMenu(){
@@ -205,6 +216,18 @@ public class Menu {
             case 2 -> editSubBranch();
             case 3 -> deleteOneSubBranch();
             case 4 -> adminBodyMenu();
+        }
+    }
+    public void productsMenu() {
+        System.out.println("press 1 to add products");
+        System.out.println("press 2 to edit one product");
+        int chooseProduct = getNumberFromUser();
+        if (chooseProduct > 4 || chooseProduct < 1) {
+            System.out.println("plz enter valid number");
+            productsMenu();
+        }
+        switch (chooseProduct){
+            case 1 -> saveOneProduct();
         }
     }
     public void saveOneBranch(){
@@ -448,8 +471,40 @@ public class Menu {
             }
         }catch (NullPointerException e){
             System.out.println(e.getCause());
+            }
         }
-        }
+        public void saveOneProduct(){
+            System.out.println("plz enter the product name");
+            String productName = getStringFromUser();
+            System.out.println("plz enter the price of the product");
+            float price = getFloatFromUser();
+            System.out.println("plz enter the number of the product");
+            int number = getNumberFromUser();
+            showAllSubBranches();
+            System.out.println("plz enter the name of sub branch");
+            String subBranchName = getStringFromUser();
+            SubBranch subBranch = null;
+            try {
+                subBranch = subBranchService.findByName(subBranchName);
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
+            Products product = new Products(productName,price,number,subBranch);
 
+            int saveOneProduct = 0;
+            try {
+                saveOneProduct = productService.save(product);
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
+            if(saveOneProduct != 0){
+                System.out.println("product saved");
+                adminBodyMenu();
+            }
+            else {
+                System.out.println("something wrong try again");
+                saveOneProduct();
+            }
+        }
         }
 
