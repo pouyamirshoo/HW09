@@ -17,13 +17,13 @@ public class ProductServiceImpel extends BaseServiceImpel<Integer, Products, Pro
     }
 
     @Override
-    public int editProductPrice(int id, float newPrice) throws SQLException {
-        return repository.editProductPrice(id,newPrice);
+    public int editProductPrice(String name, float newPrice) throws SQLException {
+        return repository.editProductPrice(name,newPrice);
     }
 
     @Override
-    public int editProductNumber(int id, int newNumber) throws SQLException {
-        return repository.editProductNumber(id,newNumber);
+    public int editProductNumber(String name, int newNumber) throws SQLException {
+        return repository.editProductNumber(name,newNumber);
     }
 
     @Override
