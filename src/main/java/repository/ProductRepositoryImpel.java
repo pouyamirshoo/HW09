@@ -11,10 +11,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProductRepositoryImpel extends BaseRepositoryImpel<Integer, Products> implements ProductRepository{
+public class ProductRepositoryImpel extends BaseRepositoryImpel<Integer, Products> implements ProductRepository {
     public ProductRepositoryImpel(Connection connection) {
         super(connection);
     }
+
     SubBranchService subBranchService = ApplicationContext.getSubBranchServiceImpel();
 
     @Override
@@ -44,11 +45,11 @@ public class ProductRepositoryImpel extends BaseRepositoryImpel<Integer, Product
 
     @Override
     public void fillParamForStatement(PreparedStatement preparedStatement, Products product, boolean isCountOnly) throws SQLException {
-        preparedStatement.setString(1,product.getProductName());
-        preparedStatement.setFloat(2,product.getPrice());
-        preparedStatement.setInt(3,product.getNumber());
+        preparedStatement.setString(1, product.getProductName());
+        preparedStatement.setFloat(2, product.getPrice());
+        preparedStatement.setInt(3, product.getNumber());
         SubBranch subBranch = product.getSubBranch();
-        preparedStatement.setInt(4,subBranch.getId());
+        preparedStatement.setInt(4, subBranch.getId());
     }
 
     @Override
@@ -70,18 +71,51 @@ public class ProductRepositoryImpel extends BaseRepositoryImpel<Integer, Product
 
     @Override
     public Products[] showAllProducts() throws SQLException {
-        Products [] products = new Products[numOfArray()];
+        Products[] products = new Products[numOfArray()];
         int i = 0;
 
         String sql = "SELECT * FROM " + getTableName();
-        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 Products product = mapResultSetToEntity(resultSet);
                 products[i] = product;
-                i ++ ;
+                i++;
             }
         }
         return products;
+    }
+
+    @Override
+    public int editProductPrice(int id, float newPrice) throws SQLException {
+
+        String sql = "UPDATE products SET products_price = ? WHERE products_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setFloat(1, newPrice);
+            preparedStatement.setInt(2, id);
+            return preparedStatement.executeUpdate();
+        }
+    }
+
+    @Override
+    public int editProductNumber(int id, int newNumber) throws SQLException {
+
+        String sql = "UPDATE products SET products_number = ? WHERE products_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, newNumber);
+            preparedStatement.setInt(2, id);
+            return preparedStatement.executeUpdate();
+
+        }
+    }
+
+    @Override
+    public int editProductSubBranch(int id, String name) throws SQLException {
+        String sql = "UPDATE products SET subbranch_id_fk = ? WHERE products_name = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, name);
+            return preparedStatement.executeUpdate();
+        }
     }
 }

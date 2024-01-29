@@ -8,4 +8,7 @@ import java.sql.SQLException;
 public interface ProductRepository extends BaseRepository<Integer, Products> {
 
     Products [] showAllProducts() throws SQLException;
+    int editProductPrice(int id, float newPrice) throws SQLException;
+    int editProductNumber(int id, int newNumber) throws SQLException;
+    int editProductSubBranch(int id, String name) throws SQLException;
 }
