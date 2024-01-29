@@ -13,6 +13,7 @@ import utility.Validation;
 
 import java.sql.SQLException;
 import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Menu {
@@ -201,6 +202,7 @@ public class Menu {
         }
         switch (chooseSubBranch){
             case 1 -> saveOneSubBranch();
+            case 2 -> editSubBranch();
         }
     }
     public void saveOneBranch(){
@@ -317,4 +319,96 @@ public class Menu {
             branchMenu();
         }
     }
-}
+    public void editSubBranch(){
+        System.out.println("press 1 to edit name");
+        System.out.println("press 2 to edit branch");
+        System.out.println("press 3 to back");
+        int chooseEditSubBranch = getNumberFromUser();
+        if(chooseEditSubBranch > 2 || chooseEditSubBranch < 1){
+            System.out.println("plz enter valid number");
+            editSubBranch();
+
+        }
+        switch (chooseEditSubBranch){
+            case 1 -> editOneSubBranchName();
+            case 2 -> editSubBranchBranch();
+            case 3 -> subBranchMenu();
+        }
+    }
+    public void editOneSubBranchName(){
+
+        showAllSubBranches();
+
+        System.out.println("plz enter the name of sub branch you want to edit name");
+        String name = getStringFromUser();
+        System.out.println("plz enter the sub branch new name");
+        String newName = getStringFromUser();
+
+        int editSubBranchName = 0;
+        try {
+            editSubBranchName = subBranchService.editName(name,newName);
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if(editSubBranchName != 0){
+            System.out.println("name changed");
+            adminBodyMenu();
+        }
+        else {
+            System.out.println("something wrong try again");
+            editOneSubBranchName();
+        }
+    }
+    public void editSubBranchBranch(){
+
+        showAllSubBranches();
+
+        System.out.println("plz enter the name of sub branch you want to edit branch");
+        String name = getStringFromUser();
+
+        System.out.println("all branches");
+        showAllBranches();
+        System.out.println("plz enter the sub branch new branch");
+        String newName = getStringFromUser();
+
+        Branch branch = null;
+        try {
+            branch = branchService.findByName(newName);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        int newFk = branch.getId();
+        int editSubBranchBranch = 0;
+        try {
+            editSubBranchBranch = subBranchService.editBranchFk(newFk,name);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if(editSubBranchBranch != 0){
+            System.out.println("branch changed");
+            adminBodyMenu();
+        }
+        else {
+            System.out.println("something wrong try again");
+            editSubBranchBranch();
+        }
+    }
+    public void showAllSubBranches(){
+        SubBranch [] subBranches = null;
+
+        try {
+            subBranches =  subBranchService.showAllSubBranches();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        try {
+            for (SubBranch subBranch : subBranches) {
+                System.out.println(subBranch.toString());
+            }
+        }catch (NullPointerException e){
+            System.out.println(e.getCause());
+        }
+        }
+
+        }
+
