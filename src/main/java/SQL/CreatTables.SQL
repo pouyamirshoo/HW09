@@ -20,3 +20,10 @@ CREATE TABLE IF NOT EXISTS subbranch(
     subbranch_name VARCHAR(255) UNIQUE NOT NULL ,
     branch_id_fk INTEGER REFERENCES branch(branch_id)
 );
+CREATE TABLE IF NOT EXISTS products(
+    products_id SERIAL PRIMARY KEY ,
+    products_name VARCHAR(255) NOT NULL ,
+    products_price FLOAT NOT NULL ,
+    products_number INTEGER NOT NULL ,
+    subbranch_id_fk INTEGER REFERENCES subbranch(subbranch_id)
+);
