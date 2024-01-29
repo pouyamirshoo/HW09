@@ -74,4 +74,14 @@ public class BranchRepositoryImpel extends BaseRepositoryImpel<Integer, Branch> 
         }
         return branches;
     }
+
+    @Override
+    public int deleteFromInnerTable(int id) throws SQLException {
+
+        String sql = "DELETE FROM subbranch WHERE branch_id_fk = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setInt(1,id);
+            return preparedStatement.executeUpdate();
+        }
+    }
 }

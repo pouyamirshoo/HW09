@@ -16,4 +16,9 @@ public class BranchServiceImpel extends BaseServiceImpel<Integer, Branch, Branch
     public Branch[] showAllBranches() throws SQLException {
         return repository.showAllBranches();
     }
+
+    @Override
+    public int deleteFromInnerTable(int id) throws SQLException {
+        return repository.deleteFromInnerTable(id);
+    }
 }

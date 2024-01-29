@@ -9,4 +9,5 @@ import java.sql.SQLException;
 public interface BranchRepository extends BaseRepository<Integer, Branch> {
 
     Branch [] showAllBranches() throws SQLException;
+    int deleteFromInnerTable(int id) throws SQLException;
 }
