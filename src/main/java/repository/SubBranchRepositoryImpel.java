@@ -34,6 +34,11 @@ public class SubBranchRepositoryImpel extends BaseRepositoryImpel<Integer, SubBr
     }
 
     @Override
+    public String getIdColumnName() {
+        return "subbranch_id";
+    }
+
+    @Override
     public String getCountOfQuestionMarkParams() {
         return "(? , ?)";
     }
@@ -47,13 +52,12 @@ public class SubBranchRepositoryImpel extends BaseRepositoryImpel<Integer, SubBr
 
     @Override
     public SubBranch mapResultSetToEntity(ResultSet resultSet) throws SQLException {
-        SubBranch subBranch = new SubBranch();
 
-        subBranch.setId(resultSet.getInt("subbranch_id"));
-        subBranch.setSubBranchName(resultSet.getString("subbranch_name"));
-        int branchId = resultSet.getInt("branch_id_fk");
-        subBranch.setBranch(branchService.findById(branchId));
-        return subBranch;
+        int id = resultSet.getInt("subbranch_id");
+        String name = resultSet.getString("subbranch_name");
+        int fk = resultSet.getInt("branch_id_fk");
+        Branch branch = branchService.findById(fk);
+        return new SubBranch(id,name,branch);
     }
 
     @Override

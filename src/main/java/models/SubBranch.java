@@ -18,12 +18,15 @@ public class SubBranch extends BaseEntity<Integer> {
         this.subBranchName = subBranchName;
         this.branch = branch;
     }
+    public SubBranch(String subBranchName){
+        this.subBranchName = subBranchName;
+    }
 
     @Override
     public String toString() {
         return "SubBranch{" +
                 "subBranchName='" + subBranchName + '\'' +
-                ", branch=" + branch.getId() +
+                ", branch=" + branch.getBranchName() +
                 '}';
     }
 }

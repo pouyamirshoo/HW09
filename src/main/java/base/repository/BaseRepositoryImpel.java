@@ -28,7 +28,7 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
 
     @Override
     public TYPE findById(ID id) throws SQLException {
-        String sql = "SELECT * FROM " + getTableName() + " WHERE id = ?";
+        String sql = "SELECT * FROM " + getTableName() + " WHERE " + getIdColumnName() + " = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, (Integer) id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -85,6 +85,7 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
 
     public abstract String getColumnsName();
     public abstract String getEditNameColumn();
+    public abstract String getIdColumnName();
 
     public abstract String getCountOfQuestionMarkParams();
 
