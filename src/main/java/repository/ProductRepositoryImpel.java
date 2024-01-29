@@ -87,23 +87,23 @@ public class ProductRepositoryImpel extends BaseRepositoryImpel<Integer, Product
     }
 
     @Override
-    public int editProductPrice(int id, float newPrice) throws SQLException {
+    public int editProductPrice(String name, float newPrice) throws SQLException {
 
-        String sql = "UPDATE products SET products_price = ? WHERE products_id = ?";
+        String sql = "UPDATE products SET products_price = ? WHERE products_name = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setFloat(1, newPrice);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setString(2, name);
             return preparedStatement.executeUpdate();
         }
     }
 
     @Override
-    public int editProductNumber(int id, int newNumber) throws SQLException {
+    public int editProductNumber(String name, int newNumber) throws SQLException {
 
-        String sql = "UPDATE products SET products_number = ? WHERE products_id = ?";
+        String sql = "UPDATE products SET products_number = ? WHERE products_name = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, newNumber);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setString(2, name);
             return preparedStatement.executeUpdate();
 
         }
