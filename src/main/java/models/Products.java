@@ -22,4 +22,14 @@ public class Products extends BaseEntity<Integer> {
         this.number = number;
         this.subBranch = subBranch;
     }
+
+    @Override
+    public String toString() {
+        return "Products{" +
+                "productName='" + productName + '\'' +
+                ", price=" + price +
+                ", number=" + number +
+                ", subBranch=" + subBranch.getSubBranchName() +
+                '}';
+    }
 }
