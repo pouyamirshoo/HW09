@@ -20,4 +20,9 @@ public class SubBranchServiceImpel extends BaseServiceImpel<Integer, SubBranch, 
     public int editBranchFk(int id, String name) throws SQLException {
         return repository.editBranchFk(id,name);
     }
+
+    @Override
+    public int deleteFromInnerTable(int id) throws SQLException {
+        return repository.deleteFromInnerTable(id);
+    }
 }
