@@ -7,4 +7,7 @@ import java.sql.SQLException;
 
 public interface ProductService extends BaseService<Integer, Products> {
     Products[] showAllProducts() throws SQLException;
+    int editProductPrice(int id, float newPrice) throws SQLException;
+    int editProductNumber(int id, int newNumber) throws SQLException;
+    int editProductSubBranch(int id, String name) throws SQLException;
 }
