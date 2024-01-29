@@ -20,46 +20,47 @@ public class Menu {
     SubBranchService subBranchService = ApplicationContext.getSubBranchServiceImpel();
     ProductService productService = ApplicationContext.getProductServiceImpel();
 
-    public int getNumberFromUser(){
+    public int getNumberFromUser() {
         int num = 0;
         try {
-         num =  sc.nextInt();
-        }catch (InputMismatchException e){
+            num = sc.nextInt();
+        } catch (InputMismatchException e) {
             System.out.println(e.getMessage());
-        }
-        finally {
+        } finally {
             sc.nextLine();
         }
         return num;
     }
-    public float getFloatFromUser(){
+
+    public float getFloatFromUser() {
         float num = 0;
         try {
-         num =  sc.nextFloat();
-        }catch (InputMismatchException e){
+            num = sc.nextFloat();
+        } catch (InputMismatchException e) {
             System.out.println(e.getMessage());
-        }
-        finally {
+        } finally {
             sc.nextLine();
         }
         return num;
     }
-    public String getStringFromUser(){
-       String input = null;
+
+    public String getStringFromUser() {
+        String input = null;
         try {
-         input =  sc.nextLine();
-        }catch (InputMismatchException e){
+            input = sc.nextLine();
+        } catch (InputMismatchException e) {
             System.out.println(e.getMessage());
         }
         return input;
     }
+
     private String getPasswordFromUser() {
         String password;
         while (true) {
             System.out.println("Please enter your password:");
             System.out.println("Hint: it has to be between 8 to 10 and must contain at least 1 lower and upper case and 1 digit and 1 char ");
             password = getStringFromUser();
-            if(Validation.isValidPassword(password))
+            if (Validation.isValidPassword(password))
                 break;
             else
                 System.out.println("plz enter a valid password");
@@ -72,78 +73,81 @@ public class Menu {
         while (true) {
             System.out.println("Please enter your email:");
             email = getStringFromUser();
-            if(Validation.isValidEmail(email))
+            if (Validation.isValidEmail(email))
                 break;
             else
                 System.out.println("plz enter a valid email");
         }
         return email;
     }
-    public void startMenu(){
+
+    public void startMenu() {
         System.out.println("************************** WELCOME TO MAKTAB ONLINE SHOP ***************************");
         System.out.println("press 1 for sign up");
         System.out.println("press 2 for log in");
         System.out.println("press 3 if you are admin");
         int startMenu = getNumberFromUser();
-        if (startMenu > 3 || startMenu < 1){
+        if (startMenu > 3 || startMenu < 1) {
             System.out.println("plz enter valid number");
             startMenu();
         }
-        switch (startMenu){
+        switch (startMenu) {
             case 1 -> saveUser();
             case 2 -> logInUser();
             case 3 -> adminLogIn();
         }
     }
-    public Users takeUserInfo(){
+
+    public Users takeUserInfo() {
         System.out.println("plz enter your full name");
         String name = getStringFromUser();
         System.out.println("plz enter your username");
         String username = getStringFromUser();
         String password = getPasswordFromUser();
         String email = getEmailFromUser();
-        return new Users(name,username,password,email);
+        return new Users(name, username, password, email);
     }
-    public void saveUser(){
+
+    public void saveUser() {
         Users user = takeUserInfo();
         int sve = 0;
         try {
-          sve  = userService.save(user);
-        }catch (SQLException e)  {
+            sve = userService.save(user);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         if (sve != 0) {
             System.out.println("welcome to the shop");
             System.out.println("now plz log in");
             logInUser();
-        }
-        else {
+        } else {
             System.out.println("something wrong plz try again");
             saveUser();
         }
     }
-    public void logInUser(){
+
+    public void logInUser() {
         System.out.println("plz enter your username");
         String username = getStringFromUser();
         System.out.println("plz enter your password");
         String password = getStringFromUser();
         Users user = null;
         try {
-          user  = userService.logIn(username,password);
-        }catch (SQLException e){
+            user = userService.logIn(username, password);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if (user != null){
+        if (user != null) {
             System.out.println("welcome dear " + user.getFullName());
             userBodyMenu();
-        }
-        else {
+        } else {
             System.out.println("wrong username or password");
             logInUser();
         }
 
     }
-    public void adminLogIn(){
+
+    public void adminLogIn() {
         System.out.println("plz enter your username");
         String username = getStringFromUser();
         System.out.println("plz enter your password");
@@ -151,73 +155,77 @@ public class Menu {
 
         Admins admin = null;
         try {
-         admin = adminService.logIn(username,password);
-        }catch (SQLException e){
+            admin = adminService.logIn(username, password);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if(admin != null){
+        if (admin != null) {
             System.out.println("welcome admin " + admin.getName());
             adminBodyMenu();
-        }
-        else {
+        } else {
             System.out.println("wrong username or password");
             adminLogIn();
         }
     }
-    public void userBodyMenu(){
+
+    public void userBodyMenu() {
         System.out.println("by");
     }
-    public void adminBodyMenu(){
+
+    public void adminBodyMenu() {
         System.out.println("press 1 to asses branch menu");
         System.out.println("press 2 to asses sub branch menu");
         System.out.println("press 3 to asses products menu");
         System.out.println("press 4 to exit");
         int chooseAdmin = getNumberFromUser();
-        if (chooseAdmin > 4 || chooseAdmin < 1){
+        if (chooseAdmin > 4 || chooseAdmin < 1) {
             System.out.println("plz enter valid number");
             adminBodyMenu();
         }
-        switch (chooseAdmin){
+        switch (chooseAdmin) {
             case 1 -> branchMenu();
             case 2 -> subBranchMenu();
             case 3 -> productsMenu();
             case 4 -> System.out.println("good by");
         }
     }
-    public void branchMenu(){
+
+    public void branchMenu() {
         System.out.println("press 1 to add one branch");
         System.out.println("press 2 to edit one branch");
         System.out.println("press 3 to delete one branch");
         System.out.println("press 4 to back");
         int chooseBranch = getNumberFromUser();
-        if (chooseBranch > 4 || chooseBranch < 1){
+        if (chooseBranch > 4 || chooseBranch < 1) {
             System.out.println("plz enter valid number");
             branchMenu();
         }
-        switch (chooseBranch){
+        switch (chooseBranch) {
             case 1 -> saveOneBranch();
             case 2 -> editOneBranch();
             case 3 -> deleteOneBranchFromInnerTable();
             case 4 -> adminBodyMenu();
         }
     }
-    public void subBranchMenu(){
+
+    public void subBranchMenu() {
         System.out.println("press 1 to add one sub branch");
         System.out.println("press 2 to edit one sub branch");
         System.out.println("press 3 to delete one sub branch");
         System.out.println("press 4 to back");
         int chooseSubBranch = getNumberFromUser();
-        if (chooseSubBranch > 4 || chooseSubBranch < 1){
+        if (chooseSubBranch > 4 || chooseSubBranch < 1) {
             System.out.println("plz enter valid number");
             subBranchMenu();
         }
-        switch (chooseSubBranch){
+        switch (chooseSubBranch) {
             case 1 -> saveOneSubBranch();
             case 2 -> editSubBranch();
             case 3 -> deleteOneSubBranch();
             case 4 -> adminBodyMenu();
         }
     }
+
     public void productsMenu() {
         System.out.println("press 1 to add products");
         System.out.println("press 2 to edit one product");
@@ -226,30 +234,32 @@ public class Menu {
             System.out.println("plz enter valid number");
             productsMenu();
         }
-        switch (chooseProduct){
+        switch (chooseProduct) {
             case 1 -> saveOneProduct();
+            case 2 -> editProducts();
         }
     }
-    public void saveOneBranch(){
+
+    public void saveOneBranch() {
         System.out.println("plz enter the branch name");
         String name = getStringFromUser();
         Branch branch = new Branch(name);
         int saveBranch = 0;
         try {
             saveBranch = branchService.save(branch);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if(saveBranch != 0){
+        if (saveBranch != 0) {
             System.out.println("branch saved");
             adminBodyMenu();
-        }
-        else {
+        } else {
             System.out.println("something wrong try again");
             branchMenu();
         }
     }
-    public void editOneBranch(){
+
+    public void editOneBranch() {
 
         showAllBranches();
 
@@ -260,32 +270,33 @@ public class Menu {
 
         int editName = 0;
         try {
-           editName = branchService.editName(oldName,newName);
-        }catch (SQLException e){
+            editName = branchService.editName(oldName, newName);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if(editName!=0){
+        if (editName != 0) {
             System.out.println("name changed");
             adminBodyMenu();
-        }
-        else {
+        } else {
             System.out.println("wrong name,plz try again");
             editOneBranch();
         }
     }
-    public void showAllBranches(){
-        Branch [] branches = null;
+
+    public void showAllBranches() {
+        Branch[] branches = null;
 
         try {
-          branches =  branchService.showAllBranches();
-        }catch (SQLException e){
+            branches = branchService.showAllBranches();
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         for (Branch branch : branches) {
             System.out.println(branch.toString());
         }
     }
-    public void deleteOneBranchFromInnerTable(){
+
+    public void deleteOneBranchFromInnerTable() {
 
         showAllBranches();
 
@@ -293,38 +304,39 @@ public class Menu {
         String name = getStringFromUser();
 
         Branch branch = null;
-        try{
+        try {
             branch = branchService.findByName(name);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-         int id = branch.getId();
+        int id = branch.getId();
 
         try {
             branchService.deleteFromInnerTable(id);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         deleteOneBranch(name);
     }
-    public void deleteOneBranch(String name){
+
+    public void deleteOneBranch(String name) {
 
         int deleteBranch = 0;
         try {
             deleteBranch = branchService.delete(name);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if(deleteBranch!=0){
+        if (deleteBranch != 0) {
             System.out.println("branch deleted");
             adminBodyMenu();
-        }
-        else {
+        } else {
             System.out.println("wrong name,plz try again");
             deleteOneBranchFromInnerTable();
         }
     }
-    public Branch loudOneBranch(){
+
+    public Branch loudOneBranch() {
 
         showAllBranches();
 
@@ -333,51 +345,52 @@ public class Menu {
         Branch branch = new Branch();
         try {
             branch = branchService.findByName(branchName);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return branch;
     }
-    public void saveOneSubBranch(){
+
+    public void saveOneSubBranch() {
 
         System.out.println("plz enter the sub branch name");
         String name = getStringFromUser();
         Branch branch = loudOneBranch();
 
-        SubBranch subBranch = new SubBranch(name,branch);
+        SubBranch subBranch = new SubBranch(name, branch);
 
         int saveSubBranch = 0;
         try {
             saveSubBranch = subBranchService.save(subBranch);
-        }catch (SQLException ew){
+        } catch (SQLException ew) {
             System.out.println(ew.getMessage());
         }
-        if(saveSubBranch != 0){
+        if (saveSubBranch != 0) {
             System.out.println("sub branch saved");
             adminBodyMenu();
-        }
-        else {
+        } else {
             System.out.println("something wrong try again");
             branchMenu();
         }
     }
-    public void editSubBranch(){
+
+    public void editSubBranch() {
         System.out.println("press 1 to edit name");
         System.out.println("press 2 to edit branch");
         System.out.println("press 3 to back");
         int chooseEditSubBranch = getNumberFromUser();
-        if(chooseEditSubBranch > 2 || chooseEditSubBranch < 1){
+        if (chooseEditSubBranch > 2 || chooseEditSubBranch < 1) {
             System.out.println("plz enter valid number");
             editSubBranch();
-
         }
-        switch (chooseEditSubBranch){
+        switch (chooseEditSubBranch) {
             case 1 -> editOneSubBranchName();
             case 2 -> editSubBranchBranch();
             case 3 -> subBranchMenu();
         }
     }
-    public void editOneSubBranchName(){
+
+    public void editOneSubBranchName() {
 
         showAllSubBranches();
 
@@ -388,20 +401,20 @@ public class Menu {
 
         int editSubBranchName = 0;
         try {
-            editSubBranchName = subBranchService.editName(name,newName);
-        } catch(SQLException e){
+            editSubBranchName = subBranchService.editName(name, newName);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if(editSubBranchName != 0){
+        if (editSubBranchName != 0) {
             System.out.println("name changed");
             adminBodyMenu();
-        }
-        else {
+        } else {
             System.out.println("something wrong try again");
             editOneSubBranchName();
         }
     }
-    public void editSubBranchBranch(){
+
+    public void editSubBranchBranch() {
 
         showAllSubBranches();
 
@@ -410,32 +423,32 @@ public class Menu {
 
         System.out.println("all branches");
         showAllBranches();
-        System.out.println("plz enter the sub branch new branch");
+        System.out.println("plz enter the sub branch new branch name");
         String newName = getStringFromUser();
 
         Branch branch = null;
         try {
             branch = branchService.findByName(newName);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         int newFk = branch.getId();
         int editSubBranchBranch = 0;
         try {
-            editSubBranchBranch = subBranchService.editBranchFk(newFk,name);
-        }catch (SQLException e){
+            editSubBranchBranch = subBranchService.editBranchFk(newFk, name);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if(editSubBranchBranch != 0){
+        if (editSubBranchBranch != 0) {
             System.out.println("branch changed");
             adminBodyMenu();
-        }
-        else {
+        } else {
             System.out.println("something wrong try again");
             editSubBranchBranch();
         }
     }
-    public void deleteOneSubBranch(){
+
+    public void deleteOneSubBranch() {
 
         showAllSubBranches();
 
@@ -445,66 +458,202 @@ public class Menu {
         int deleteOneSubBranch = 0;
         try {
             deleteOneSubBranch = subBranchService.delete(name);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        if(deleteOneSubBranch != 0){
+        if (deleteOneSubBranch != 0) {
             System.out.println("branch deleted");
             adminBodyMenu();
-        }
-        else {
+        } else {
             System.out.println("something wrong try again");
             deleteOneSubBranch();
         }
     }
-    public void showAllSubBranches(){
-        SubBranch [] subBranches = null;
+
+    public void showAllSubBranches() {
+        SubBranch[] subBranches = null;
 
         try {
-            subBranches =  subBranchService.showAllSubBranches();
-        }catch (SQLException e){
+            subBranches = subBranchService.showAllSubBranches();
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         try {
             for (SubBranch subBranch : subBranches) {
                 System.out.println(subBranch.toString());
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println(e.getCause());
-            }
         }
-        public void saveOneProduct(){
-            System.out.println("plz enter the product name");
-            String productName = getStringFromUser();
-            System.out.println("plz enter the price of the product");
-            float price = getFloatFromUser();
-            System.out.println("plz enter the number of the product");
-            int number = getNumberFromUser();
-            showAllSubBranches();
-            System.out.println("plz enter the name of sub branch");
-            String subBranchName = getStringFromUser();
-            SubBranch subBranch = null;
-            try {
-                subBranch = subBranchService.findByName(subBranchName);
-            }catch (SQLException e){
-                System.out.println(e.getMessage());
-            }
-            Products product = new Products(productName,price,number,subBranch);
+    }
 
-            int saveOneProduct = 0;
-            try {
-                saveOneProduct = productService.save(product);
-            }catch (SQLException e){
-                System.out.println(e.getMessage());
-            }
-            if(saveOneProduct != 0){
-                System.out.println("product saved");
-                adminBodyMenu();
-            }
-            else {
-                System.out.println("something wrong try again");
-                saveOneProduct();
+    public void saveOneProduct() {
+        System.out.println("plz enter the product name");
+        String productName = getStringFromUser();
+        System.out.println("plz enter the price of the product");
+        float price = getFloatFromUser();
+        System.out.println("plz enter the number of the product");
+        int number = getNumberFromUser();
+        showAllSubBranches();
+        System.out.println("plz enter the name of sub branch");
+        String subBranchName = getStringFromUser();
+        SubBranch subBranch = null;
+        try {
+            subBranch = subBranchService.findByName(subBranchName);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        Products product = new Products(productName, price, number, subBranch);
+
+        int saveOneProduct = 0;
+        try {
+            saveOneProduct = productService.save(product);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        if (saveOneProduct != 0) {
+            System.out.println("product saved");
+            adminBodyMenu();
+        } else {
+            System.out.println("something wrong try again");
+            saveOneProduct();
+        }
+    }
+
+    public void editProducts() {
+        System.out.println("press 1 to edit product name");
+        System.out.println("press 2 to edit product price");
+        System.out.println("press 3 to edit product number");
+        System.out.println("press 4 to edit product sub branch");
+        System.out.println("press 5 to back");
+        int chooseEditProduct = getNumberFromUser();
+        if (chooseEditProduct > 5 || chooseEditProduct < 1) {
+            System.out.println("plz enter valid number");
+            editProducts();
+        }
+            switch (chooseEditProduct) {
+                case 1 -> editOneProductName();
+                case 2 -> editProductPrice();
+                case 3 -> editProductNumber();
+                case 4 -> editProductSubBranch();
+                case 5 -> productsMenu();
             }
         }
+
+    public void showAllProducts() {
+        Products[] products = null;
+
+        try {
+            products = productService.showAllProducts();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
+        for (int i = 0; i < Objects.requireNonNull(products).length; i++) {
+            System.out.println(products[i].toString());
+        }
+    }
+
+    public void editOneProductName() {
+
+        showAllProducts();
+
+        System.out.println("plz enter the name of product you want to edit name");
+        String name = getStringFromUser();
+        System.out.println("plz enter the product new name");
+        String newName = getStringFromUser();
+
+        int editProductName = 0;
+        try {
+            editProductName = productService.editName(name, newName);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        if (editProductName != 0) {
+            System.out.println("name changed");
+            adminBodyMenu();
+        } else {
+            System.out.println("something wrong try again");
+            editOneProductName();
+        }
+    }
+    public void editProductPrice(){
+
+        showAllProducts();
+
+        System.out.println("plz enter the name of product you want to edit price");
+        String name = getStringFromUser();
+        System.out.println("plz enter the product new price");
+        float newPrice = getFloatFromUser();
+
+        int editProductPrice = 0;
+        try {
+            editProductPrice = productService.editProductPrice(name,newPrice);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if (editProductPrice != 0) {
+            System.out.println("price changed");
+            adminBodyMenu();
+        } else {
+            System.out.println("something wrong try again");
+            editProductPrice();
+        }
+    }
+    public void editProductNumber(){
+
+        showAllProducts();
+
+        System.out.println("plz enter the name of product you want to edit number");
+        String name = getStringFromUser();
+        System.out.println("plz enter the product new number");
+        int newNumber = getNumberFromUser();
+
+        int editProductNumber = 0;
+        try{
+            editProductNumber = productService.editProductNumber(name,newNumber);
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if (editProductNumber != 0) {
+            System.out.println("number changed");
+            adminBodyMenu();
+        } else {
+            System.out.println("something wrong try again");
+            editProductNumber();
+        }
+    }
+    public void editProductSubBranch(){
+
+        showAllProducts();
+
+        System.out.println("plz enter the name of product you want to edit sub branch");
+        String name = getStringFromUser();
+
+        System.out.println("all sub branches");
+        showAllSubBranches();
+        System.out.println("plz enter the product new sub branch name");
+        String newName = getStringFromUser();
+
+        SubBranch subBranch = null;
+        try {
+            subBranch = subBranchService.findByName(newName);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        int newFk = subBranch.getId();
+        int editProductSubBranch = 0;
+        try {
+            editProductSubBranch = productService.editProductSubBranch(newFk,name);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        if (editProductSubBranch != 0) {
+            System.out.println("sub branch changed");
+            adminBodyMenu();
+        } else {
+            System.out.println("something wrong try again");
+            editProductSubBranch();
+        }
+    }
+}
 
