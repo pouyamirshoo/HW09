@@ -186,7 +186,7 @@ public class Menu {
         switch (chooseBranch){
             case 1 -> saveOneBranch();
             case 2 -> editOneBranch();
-            case 3 -> deleteOneBranch();
+            case 3 -> deleteOneBranchFromInnerTable();
             case 4 -> adminBodyMenu();
         }
     }
@@ -203,6 +203,8 @@ public class Menu {
         switch (chooseSubBranch){
             case 1 -> saveOneSubBranch();
             case 2 -> editSubBranch();
+            case 3 -> deleteOneSubBranch();
+            case 4 -> adminBodyMenu();
         }
     }
     public void saveOneBranch(){
@@ -260,12 +262,29 @@ public class Menu {
             System.out.println(branch.toString());
         }
     }
-    public void deleteOneBranch(){
+    public void deleteOneBranchFromInnerTable(){
 
         showAllBranches();
 
         System.out.println("plz enter the name of branch you want to delete");
         String name = getStringFromUser();
+
+        Branch branch = null;
+        try{
+            branch = branchService.findByName(name);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+         int id = branch.getId();
+
+        try {
+            branchService.deleteFromInnerTable(id);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        deleteOneBranch(name);
+    }
+    public void deleteOneBranch(String name){
 
         int deleteBranch = 0;
         try {
@@ -279,7 +298,7 @@ public class Menu {
         }
         else {
             System.out.println("wrong name,plz try again");
-            deleteOneBranch();
+            deleteOneBranchFromInnerTable();
         }
     }
     public Branch loudOneBranch(){
@@ -391,6 +410,28 @@ public class Menu {
         else {
             System.out.println("something wrong try again");
             editSubBranchBranch();
+        }
+    }
+    public void deleteOneSubBranch(){
+
+        showAllSubBranches();
+
+        System.out.println("plz enter the name of sub branch you want to delete");
+        String name = getStringFromUser();
+
+        int deleteOneSubBranch = 0;
+        try {
+            deleteOneSubBranch = subBranchService.delete(name);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if(deleteOneSubBranch != 0){
+            System.out.println("branch deleted");
+            adminBodyMenu();
+        }
+        else {
+            System.out.println("something wrong try again");
+            deleteOneSubBranch();
         }
     }
     public void showAllSubBranches(){
