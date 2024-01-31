@@ -203,7 +203,7 @@ public class Menu {
         switch (chooseBranch) {
             case 1 -> saveOneBranch();
             case 2 -> editOneBranch();
-            case 3 -> deleteOneBranchFromInnerTable();
+            case 3 -> deleteBranchCheck();
             case 4 -> adminBodyMenu();
         }
     }
@@ -297,6 +297,16 @@ public class Menu {
         }
         for (Branch branch : branches) {
             System.out.println(branch.toString());
+        }
+    }
+    public void deleteBranchCheck() {
+        System.out.println("plz check if there is any sub branch in product table first");
+        int check = deleteOneSubBranchFromInnerTableCheck();
+        if (check != 0) {
+            deleteOneBranchFromInnerTable();
+        } else {
+            System.out.println("something wrong,try again");
+            deleteBranchCheck();
         }
     }
 
@@ -470,6 +480,27 @@ public class Menu {
             System.out.println(e.getMessage());
         }
         deleteOneSubBranch(name);
+    }
+    public int deleteOneSubBranchFromInnerTableCheck(){
+
+        showAllSubBranches();
+
+        System.out.println("plz enter the name of sub branch you want to delete");
+        String name = getStringFromUser();
+
+        int id = 0;
+        try {
+            id = subBranchService.findByName(name).getId();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        int check = 0;
+        try {
+         check = subBranchService.deleteFromInnerTable(id);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return check;
     }
 
     public void deleteOneSubBranch(String name) {
