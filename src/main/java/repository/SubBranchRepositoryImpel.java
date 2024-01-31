@@ -76,7 +76,8 @@ public class SubBranchRepositoryImpel extends BaseRepositoryImpel<Integer, SubBr
 
     @Override
     public int deleteFromInnerTable(int id) throws SQLException {
-        String sql = "DELETE FROM product WHERE subbranch_id_fk = ?";
+
+        String sql = "DELETE FROM products WHERE subbranch_id_fk = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate();
