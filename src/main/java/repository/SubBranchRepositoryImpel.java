@@ -39,6 +39,11 @@ public class SubBranchRepositoryImpel extends BaseRepositoryImpel<Integer, SubBr
     }
 
     @Override
+    public String getIdFkColumnName() {
+        return "branch_id_fk";
+    }
+
+    @Override
     public String getCountOfQuestionMarkParams() {
         return "(? , ?)";
     }
@@ -82,6 +87,26 @@ public class SubBranchRepositoryImpel extends BaseRepositoryImpel<Integer, SubBr
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate();
         }
+    }
+    @Override
+    public SubBranch[] showOneBranchSubBranches(int id) throws SQLException {
+
+        SubBranch [] subBranches = new SubBranch[numOfOneBranchArray(id)];
+
+        int i = 0;
+
+        String sql = "SELECT * FROM " + getTableName() + " WHERE " + getIdFkColumnName() + " = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                SubBranch subBranch = mapResultSetToEntity(resultSet);
+                subBranches[i] = subBranch;
+                i ++ ;
+            }
+        }
+        return subBranches;
+
     }
 
     @Override
