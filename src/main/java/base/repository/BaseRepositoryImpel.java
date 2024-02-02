@@ -80,12 +80,27 @@ public abstract class BaseRepositoryImpel<ID extends Serializable, TYPE extends 
         }
         return numOfArray;
     }
+    public int numOfOneArray(int id) throws SQLException {
+
+        int numOfArrayOne = 0;
+
+        String sql = "SELECT * FROM " + getTableName() + " WHERE " + getIdFkColumnName() + "= ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                numOfArrayOne ++;
+            }
+        }
+        return numOfArrayOne;
+    }
 
     public abstract String getTableName();
 
     public abstract String getColumnsName();
     public abstract String getEditNameColumn();
     public abstract String getIdColumnName();
+    public abstract String getIdFkColumnName();
 
     public abstract String getCountOfQuestionMarkParams();
 
