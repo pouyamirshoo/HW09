@@ -139,7 +139,7 @@ public class Menu {
         }
         if (user != null) {
             System.out.println("welcome dear " + user.getFullName());
-            userBodyMenu();
+            userBodyMenu(user);
         } else {
             System.out.println("wrong username or password");
             logInUser();
@@ -168,7 +168,7 @@ public class Menu {
         }
     }
 
-    public void userBodyMenu() {
+    public void userBodyMenu(Users user) {
         System.out.println("by");
     }
 
@@ -295,17 +295,25 @@ public class Menu {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        assert branches != null;
         for (Branch branch : branches) {
             System.out.println(branch.toString());
         }
     }
     public void deleteBranchCheck() {
-        System.out.println("plz check if there is any sub branch in product table first");
-        int check = deleteOneSubBranchFromInnerTableCheck();
-        if (check != 0) {
-            deleteOneBranchFromInnerTable();
-        } else {
-            System.out.println("something wrong,try again");
+        try {
+            System.out.println("plz check if there is any sub branch in product table first");
+            System.out.println("is there any sub branch in product table?(y,n)");
+            int check = deleteOneSubBranchFromInnerTableCheck();
+            String checkInput = getStringFromUser();
+
+            if (check != 0 && checkInput.equals("y")) {
+                deleteOneBranchFromInnerTable();
+            } else {
+                deleteBranchCheck();
+            }
+        }catch (NullPointerException e){
+            System.out.println(e.getMessage());
             deleteBranchCheck();
         }
     }
@@ -432,54 +440,64 @@ public class Menu {
 
         showAllSubBranches();
 
-        System.out.println("plz enter the name of sub branch you want to edit branch");
-        String name = getStringFromUser();
-
-        System.out.println("all branches");
-        showAllBranches();
-        System.out.println("plz enter the sub branch new branch name");
-        String newName = getStringFromUser();
-
-        Branch branch = null;
         try {
-            branch = branchService.findByName(newName);
-        } catch (SQLException e) {
+            System.out.println("plz enter the name of sub branch you want to edit branch");
+            String name = getStringFromUser();
+
+            System.out.println("all branches");
+            showAllBranches();
+            System.out.println("plz enter the sub branch new branch name");
+            String newName = getStringFromUser();
+
+            Branch branch = null;
+            try {
+                branch = branchService.findByName(newName);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            int newFk = branch.getId();
+            int editSubBranchBranch = 0;
+            try {
+                editSubBranchBranch = subBranchService.editBranchFk(newFk, name);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            if (editSubBranchBranch != 0) {
+                System.out.println("branch changed");
+                adminBodyMenu();
+            } else {
+                System.out.println("something wrong try again");
+                editSubBranchBranch();
+            }
+        } catch (NullPointerException e){
             System.out.println(e.getMessage());
-        }
-        int newFk = branch.getId();
-        int editSubBranchBranch = 0;
-        try {
-            editSubBranchBranch = subBranchService.editBranchFk(newFk, name);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        if (editSubBranchBranch != 0) {
-            System.out.println("branch changed");
-            adminBodyMenu();
-        } else {
-            System.out.println("something wrong try again");
             editSubBranchBranch();
         }
     }
-    public void deleteOneSubBranchFromInnerTable(){
+    public void deleteOneSubBranchFromInnerTable() {
 
         showAllSubBranches();
 
-        System.out.println("plz enter the name of sub branch you want to delete");
-        String name = getStringFromUser();
+        try {
+            System.out.println("plz enter the name of sub branch you want to delete");
+            String name = getStringFromUser();
 
-        int id = 0;
-        try {
-            id = subBranchService.findByName(name).getId();
-        }catch (SQLException e){
+            int id = 0;
+            try {
+                id = subBranchService.findByName(name).getId();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            try {
+                subBranchService.deleteFromInnerTable(id);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            deleteOneSubBranch(name);
+        } catch (NullPointerException e){
             System.out.println(e.getMessage());
+            deleteOneSubBranchFromInnerTable();
         }
-        try {
-             subBranchService.deleteFromInnerTable(id);
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-        deleteOneSubBranch(name);
     }
     public int deleteOneSubBranchFromInnerTableCheck(){
 
@@ -535,7 +553,7 @@ public class Menu {
                 System.out.println(subBranch.toString());
             }
         } catch (NullPointerException e) {
-            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -674,36 +692,41 @@ public class Menu {
             editProductNumber();
         }
     }
-    public void editProductSubBranch(){
+    public void editProductSubBranch() {
 
         showAllProducts();
 
-        System.out.println("plz enter the name of product you want to edit sub branch");
-        String name = getStringFromUser();
-
-        System.out.println("all sub branches");
-        showAllSubBranches();
-        System.out.println("plz enter the product new sub branch name");
-        String newName = getStringFromUser();
-
-        SubBranch subBranch = null;
         try {
-            subBranch = subBranchService.findByName(newName);
-        } catch (SQLException e) {
+            System.out.println("plz enter the name of product you want to edit sub branch");
+            String name = getStringFromUser();
+
+            System.out.println("all sub branches");
+            showAllSubBranches();
+            System.out.println("plz enter the product new sub branch name");
+            String newName = getStringFromUser();
+
+            SubBranch subBranch = null;
+            try {
+                subBranch = subBranchService.findByName(newName);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            int newFk = subBranch.getId();
+            int editProductSubBranch = 0;
+            try {
+                editProductSubBranch = productService.editProductSubBranch(newFk, name);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+            if (editProductSubBranch != 0) {
+                System.out.println("sub branch changed");
+                adminBodyMenu();
+            } else {
+                System.out.println("something wrong try again");
+                editProductSubBranch();
+            }
+        } catch (NullPointerException e){
             System.out.println(e.getMessage());
-        }
-        int newFk = subBranch.getId();
-        int editProductSubBranch = 0;
-        try {
-            editProductSubBranch = productService.editProductSubBranch(newFk,name);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        if (editProductSubBranch != 0) {
-            System.out.println("sub branch changed");
-            adminBodyMenu();
-        } else {
-            System.out.println("something wrong try again");
             editProductSubBranch();
         }
     }
