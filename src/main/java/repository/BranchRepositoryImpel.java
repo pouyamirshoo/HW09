@@ -34,6 +34,11 @@ public class BranchRepositoryImpel extends BaseRepositoryImpel<Integer, Branch> 
     }
 
     @Override
+    public String getIdFkColumnName() {
+        return null;
+    }
+
+    @Override
     public String getCountOfQuestionMarkParams() {
         return "(?)";
     }
