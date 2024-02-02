@@ -28,6 +28,10 @@ CREATE TABLE IF NOT EXISTS products(
     subbranch_id_fk INTEGER REFERENCES subbranch(subbranch_id)
 );
 CREATE TABLE IF NOT EXISTS factor(
-    factor_id SERIAL ,
-    user_id_fk INTEGER
+    factor_id SERIAL PRIMARY KEY ,
+    user_id_fk INTEGER REFERENCES users(user_id)
+);
+CREATE TABLE IF NOT EXISTS factor_product(
+    factor_id_fk INTEGER REFERENCES factor(factor_id),
+    product_id_fk INTEGER REFERENCES products(products_id)
 );
