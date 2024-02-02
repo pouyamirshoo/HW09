@@ -91,7 +91,7 @@ public class SubBranchRepositoryImpel extends BaseRepositoryImpel<Integer, SubBr
     @Override
     public SubBranch[] showOneBranchSubBranches(int id) throws SQLException {
 
-        SubBranch [] subBranches = new SubBranch[numOfOneBranchArray(id)];
+        SubBranch [] subBranches = new SubBranch[numOfOneArray(id)];
 
         int i = 0;
 
