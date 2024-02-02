@@ -1,7 +1,6 @@
 package repository;
 
 import base.repository.BaseRepositoryImpel;
-import models.Branch;
 import models.Users;
 
 import java.sql.Connection;
@@ -32,6 +31,11 @@ public class UserRepositoryImpel extends BaseRepositoryImpel<Integer, Users> imp
 
     @Override
     public String getIdColumnName() {
+        return null;
+    }
+
+    @Override
+    public String getIdFkColumnName() {
         return null;
     }
 
@@ -76,4 +80,16 @@ public class UserRepositoryImpel extends BaseRepositoryImpel<Integer, Users> imp
         }
         return null;
     }
+    public int saveUserInnerTable(int id) throws SQLException {
+
+        String sql = "INSERT INTO TABLE factor(user_id_fk) VALUES (?)";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setInt(1,id);
+            return preparedStatement.executeUpdate();
+        }
+    }
+//    public int countOfUserINFactor(int id){
+//
+//        String sql = "SELECT COUNT FROM factor WHERE factor_"
+//    }
 }

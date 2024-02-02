@@ -16,4 +16,9 @@ public class UserServiceImpel extends BaseServiceImpel<Integer, Users, UserRepos
     public Users logIn(String username,String password) throws SQLException {
         return repository.logIn(username,password);
     }
+
+    @Override
+    public int saveUserInnerTable(int id) throws SQLException {
+        return repository.saveUserInnerTable(id);
+    }
 }
