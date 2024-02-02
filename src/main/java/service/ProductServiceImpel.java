@@ -30,4 +30,9 @@ public class ProductServiceImpel extends BaseServiceImpel<Integer, Products, Pro
     public int editProductSubBranch(int id, String name) throws SQLException {
         return repository.editProductSubBranch(id,name);
     }
+
+    @Override
+    public Products[] showOneSubBranchProducts(int id) throws SQLException {
+        return repository.showOneSubBranchProducts(id);
+    }
 }

@@ -11,4 +11,5 @@ public interface ProductRepository extends BaseRepository<Integer, Products> {
     int editProductPrice(String name, float newPrice) throws SQLException;
     int editProductNumber(String name, int newNumber) throws SQLException;
     int editProductSubBranch(int id, String name) throws SQLException;
+    Products[] showOneSubBranchProducts(int id) throws SQLException;
 }

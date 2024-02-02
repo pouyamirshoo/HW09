@@ -39,6 +39,11 @@ public class ProductRepositoryImpel extends BaseRepositoryImpel<Integer, Product
     }
 
     @Override
+    public String getIdFkColumnName() {
+        return "subbranch_id_fk";
+    }
+
+    @Override
     public String getCountOfQuestionMarkParams() {
         return "(? , ? , ? , ?)";
     }
@@ -84,6 +89,25 @@ public class ProductRepositoryImpel extends BaseRepositoryImpel<Integer, Product
             }
         }
         return products;
+    }
+    public Products[] showOneSubBranchProducts(int id) throws SQLException {
+
+        Products [] products = new Products[numOfOneArray(id)];
+
+        int i = 0;
+
+        String sql = "SELECT * FROM " + getTableName() + " WHERE " + getIdFkColumnName() + " = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                Products product  = mapResultSetToEntity(resultSet);
+                products[i] = product;
+                i ++ ;
+            }
+        }
+        return products;
+
     }
 
     @Override
