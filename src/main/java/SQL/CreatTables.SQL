@@ -27,3 +27,7 @@ CREATE TABLE IF NOT EXISTS products(
     products_number INTEGER NOT NULL ,
     subbranch_id_fk INTEGER REFERENCES subbranch(subbranch_id)
 );
+CREATE TABLE IF NOT EXISTS factor(
+    factor_id INTEGER ,
+    product_id_fk INTEGER
+);
