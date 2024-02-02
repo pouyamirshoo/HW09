@@ -15,6 +15,7 @@ public class ApplicationContext {
     private static final BranchRepository BRANCH_REPOSITORY;
     private static final SubBranchRepository SUB_BRANCH_REPOSITORY;
     private static final ProductRepository PRODUCT_REPOSITORY;
+    private static final FactorRepository FACTOR_REPOSITORY;
 
 
     private static final UserService USER_SERVICE;
@@ -22,6 +23,7 @@ public class ApplicationContext {
     private static final BranchService BRANCH_SERVICE;
     private static final SubBranchService SUB_BRANCH_SERVICE;
     private static final ProductService PRODUCT_SERVICE;
+    private static final FactorService FACTOR_SERVICE;
 
     static {
         CONNECTION = DBConfig.getConnection();
@@ -40,6 +42,9 @@ public class ApplicationContext {
 
         PRODUCT_REPOSITORY = new ProductRepositoryImpel(CONNECTION);
         PRODUCT_SERVICE = new ProductServiceImpel(PRODUCT_REPOSITORY);
+
+        FACTOR_REPOSITORY = new FactorRepositoryImpel(CONNECTION);
+        FACTOR_SERVICE = new FactorServiceImpel(FACTOR_REPOSITORY);
     }
 
     public static UserService getUserServiceImpel() {
@@ -56,5 +61,8 @@ public class ApplicationContext {
     }
     public static ProductService getProductServiceImpel(){
         return PRODUCT_SERVICE;
+    }
+    public static FactorService getFactorServiceImpel(){
+        return FACTOR_SERVICE;
     }
 }
