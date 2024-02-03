@@ -6,9 +6,7 @@ import utility.ApplicationContext;
 import utility.Validation;
 
 import java.sql.SQLException;
-import java.util.InputMismatchException;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Menu {
 
@@ -19,6 +17,7 @@ public class Menu {
     BranchService branchService = ApplicationContext.getBranchServiceImpel();
     SubBranchService subBranchService = ApplicationContext.getSubBranchServiceImpel();
     ProductService productService = ApplicationContext.getProductServiceImpel();
+    FactorService factorService = ApplicationContext.getFactorServiceImpel();
 
     public int getNumberFromUser() {
         int num = 0;
@@ -169,7 +168,154 @@ public class Menu {
     }
 
     public void userBodyMenu(Users user) {
-        System.out.println("by");
+
+        boolean flag = true;
+        int userId = user.getId();
+
+
+        try {
+            userService.saveUserInnerTable(userId);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        int idF = numOfFactor(userId);
+
+        while (flag) {
+
+            Products product = shop();
+            if (product == null)
+                System.out.println("this product is out of number,sorry");
+            else {
+                int idP = product.getId();
+                try {
+                    factorService.saveFactorInnerTable(idF, idP);
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+                System.out.println("do you want more products(y,n)");
+                String choose = getStringFromUser();
+
+                if (!choose.equals("y")) {
+                    flag = false;
+                }
+            }
+        }
+
+
+    public Products shop() {
+
+        showAllBranches();
+
+        Branch branch = takeOneBranch();
+
+        int id = branch.getId();
+        showOneBranchSubBranches(id);
+
+        SubBranch subBranch = takeOneSubBranch();
+
+        int idSub = subBranch.getId();
+        showOneSubBranchProduct(idSub);
+
+        return takeOneProduct();
+    }
+    public int numOfFactor(int id){
+         int [] nums = null;
+         int numOfFactor = 0;
+         try {
+             nums = factorService.numOfFactor(id);
+         }catch (SQLException e){
+             System.out.println(e.getMessage());
+         }
+        assert nums != null;
+        for (int i = 0; i < nums.length; i++) {
+            int temp = nums[i];
+            if(temp > numOfFactor)
+                numOfFactor = temp;
+        }
+        return numOfFactor;
+        }
+
+
+    public Branch takeOneBranch() {
+        System.out.println("plz enter the name of branch");
+        String name = getStringFromUser();
+        Branch branch = null;
+        try {
+            branch = branchService.findByName(name);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return branch;
+    }
+
+    public SubBranch takeOneSubBranch() {
+        System.out.println("plz enter the name of sub branch");
+        String name = getStringFromUser();
+        SubBranch subBranch = null;
+        try {
+            subBranch = subBranchService.findByName(name);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return subBranch;
+    }
+    public Products takeOneProduct() {
+        System.out.println("plz enter the name of product");
+        String name = getStringFromUser();
+        Products product  = null;
+        try {
+            product = productService.findByName(name);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        assert product != null;
+        int count = product.getNumber();
+        if(count > 0) {
+            decreaseNumOfProduct(product);
+            return product;
+        }
+        else
+            return null;
+    }
+    public void decreaseNumOfProduct(Products product){
+        int newCount = product.getNumber() - 1;
+        String name = product.getProductName();
+        try {
+            productService.editProductNumber(name,newCount);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void showOneBranchSubBranches(int id) {
+        SubBranch[] subBranches = null;
+        try {
+            subBranches = subBranchService.showOneBranchSubBranches(id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            assert subBranches != null;
+            for (SubBranch subBranch : subBranches) {
+                System.out.println(subBranch.toString());
+            }
+        }catch (NullPointerException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public void showOneSubBranchProduct(int id) {
+        Products[] products = null;
+        try {
+            products = productService.showOneSubBranchProducts(id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        assert products != null;
+        for (Products product:products) {
+            System.out.println(product.toString());
+        }
     }
 
     public void adminBodyMenu() {
@@ -300,6 +446,7 @@ public class Menu {
             System.out.println(branch.toString());
         }
     }
+
     public void deleteBranchCheck() {
         try {
             System.out.println("plz check if there is any sub branch in product table first");
@@ -312,7 +459,7 @@ public class Menu {
             } else {
                 deleteBranchCheck();
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println(e.getMessage());
             deleteBranchCheck();
         }
@@ -331,6 +478,7 @@ public class Menu {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        assert branch != null;
         int id = branch.getId();
 
         try {
@@ -455,6 +603,7 @@ public class Menu {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
+            assert branch != null;
             int newFk = branch.getId();
             int editSubBranchBranch = 0;
             try {
@@ -469,11 +618,12 @@ public class Menu {
                 System.out.println("something wrong try again");
                 editSubBranchBranch();
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println(e.getMessage());
             editSubBranchBranch();
         }
     }
+
     public void deleteOneSubBranchFromInnerTable() {
 
         showAllSubBranches();
@@ -494,12 +644,13 @@ public class Menu {
                 System.out.println(e.getMessage());
             }
             deleteOneSubBranch(name);
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println(e.getMessage());
             deleteOneSubBranchFromInnerTable();
         }
     }
-    public int deleteOneSubBranchFromInnerTableCheck(){
+
+    public int deleteOneSubBranchFromInnerTableCheck() {
 
         showAllSubBranches();
 
@@ -509,20 +660,19 @@ public class Menu {
         int id = 0;
         try {
             id = subBranchService.findByName(name).getId();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         int check = 0;
         try {
-         check = subBranchService.deleteFromInnerTable(id);
-        }catch (SQLException e){
+            check = subBranchService.deleteFromInnerTable(id);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return check;
     }
 
     public void deleteOneSubBranch(String name) {
-
 
 
         int deleteOneSubBranch = 0;
@@ -549,6 +699,7 @@ public class Menu {
             System.out.println(e.getMessage());
         }
         try {
+            assert subBranches != null;
             for (SubBranch subBranch : subBranches) {
                 System.out.println(subBranch.toString());
             }
@@ -601,14 +752,14 @@ public class Menu {
             System.out.println("plz enter valid number");
             editProducts();
         }
-            switch (chooseEditProduct) {
-                case 1 -> editOneProductName();
-                case 2 -> editProductPrice();
-                case 3 -> editProductNumber();
-                case 4 -> editProductSubBranch();
-                case 5 -> productsMenu();
-            }
+        switch (chooseEditProduct) {
+            case 1 -> editOneProductName();
+            case 2 -> editProductPrice();
+            case 3 -> editProductNumber();
+            case 4 -> editProductSubBranch();
+            case 5 -> productsMenu();
         }
+    }
 
     public void showAllProducts() {
         Products[] products = null;
@@ -646,7 +797,8 @@ public class Menu {
             editOneProductName();
         }
     }
-    public void editProductPrice(){
+
+    public void editProductPrice() {
 
         showAllProducts();
 
@@ -657,8 +809,8 @@ public class Menu {
 
         int editProductPrice = 0;
         try {
-            editProductPrice = productService.editProductPrice(name,newPrice);
-        }catch (SQLException e){
+            editProductPrice = productService.editProductPrice(name, newPrice);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         if (editProductPrice != 0) {
@@ -669,7 +821,8 @@ public class Menu {
             editProductPrice();
         }
     }
-    public void editProductNumber(){
+
+    public void editProductNumber() {
 
         showAllProducts();
 
@@ -679,9 +832,9 @@ public class Menu {
         int newNumber = getNumberFromUser();
 
         int editProductNumber = 0;
-        try{
-            editProductNumber = productService.editProductNumber(name,newNumber);
-        } catch (SQLException e){
+        try {
+            editProductNumber = productService.editProductNumber(name, newNumber);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         if (editProductNumber != 0) {
@@ -692,6 +845,7 @@ public class Menu {
             editProductNumber();
         }
     }
+
     public void editProductSubBranch() {
 
         showAllProducts();
@@ -711,6 +865,7 @@ public class Menu {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
+            assert subBranch != null;
             int newFk = subBranch.getId();
             int editProductSubBranch = 0;
             try {
@@ -725,12 +880,13 @@ public class Menu {
                 System.out.println("something wrong try again");
                 editProductSubBranch();
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println(e.getMessage());
             editProductSubBranch();
         }
     }
-    public void deleteOneProduct(){
+
+    public void deleteOneProduct() {
 
         showAllProducts();
 
@@ -739,7 +895,7 @@ public class Menu {
         int deleteProduct = 0;
         try {
             deleteProduct = productService.delete(name);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         if (deleteProduct != 0) {
