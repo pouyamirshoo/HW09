@@ -82,14 +82,10 @@ public class UserRepositoryImpel extends BaseRepositoryImpel<Integer, Users> imp
     }
     public int saveUserInnerTable(int id) throws SQLException {
 
-        String sql = "INSERT INTO TABLE factor(user_id_fk) VALUES (?)";
+        String sql = "INSERT INTO factor(user_id_fk) VALUES (?)";
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setInt(1,id);
             return preparedStatement.executeUpdate();
         }
     }
-//    public int countOfUserINFactor(int id){
-//
-//        String sql = "SELECT COUNT FROM factor WHERE factor_"
-//    }
 }
