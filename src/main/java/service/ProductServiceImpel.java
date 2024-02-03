@@ -35,4 +35,9 @@ public class ProductServiceImpel extends BaseServiceImpel<Integer, Products, Pro
     public Products[] showOneSubBranchProducts(int id) throws SQLException {
         return repository.showOneSubBranchProducts(id);
     }
+
+    @Override
+    public int deleteFromInnerTable(int id) throws SQLException {
+        return repository.deleteFromInnerTable(id);
+    }
 }

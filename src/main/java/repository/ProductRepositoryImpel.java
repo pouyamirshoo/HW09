@@ -142,4 +142,12 @@ public class ProductRepositoryImpel extends BaseRepositoryImpel<Integer, Product
             return preparedStatement.executeUpdate();
         }
     }
+    public int deleteFromInnerTable(int id) throws SQLException {
+
+        String sql = "DELETE FROM factor_product WHERE product_id_fk = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            return preparedStatement.executeUpdate();
+        }
+    }
 }
