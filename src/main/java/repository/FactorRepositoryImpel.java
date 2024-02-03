@@ -16,7 +16,7 @@ public class FactorRepositoryImpel extends BaseRepositoryImpel<Integer, Factor> 
 
     @Override
     public String getTableName() {
-        return null;
+        return "factor_product";
     }
 
     @Override
@@ -36,7 +36,7 @@ public class FactorRepositoryImpel extends BaseRepositoryImpel<Integer, Factor> 
 
     @Override
     public String getIdFkColumnName() {
-        return null;
+        return "factor_id_fk";
     }
 
     @Override
@@ -83,5 +83,22 @@ public class FactorRepositoryImpel extends BaseRepositoryImpel<Integer, Factor> 
             preparedStatement.setInt(2,idP);
             return preparedStatement.executeUpdate();
         }
+    }
+    public int [] productsOfOneFactor(int id) throws SQLException {
+
+        int [] productsId = new int[numOfOneArray(id)];
+        int  i = 0;
+
+        String sql = "SELECT * FROM factor_product WHERE factor_id_fk = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                int temp = resultSet.getInt("product_id_fk");
+                productsId[i] = temp;
+                i++;
+            }
+        }
+        return productsId;
     }
 }
