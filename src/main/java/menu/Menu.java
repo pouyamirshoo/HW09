@@ -172,27 +172,44 @@ public class Menu {
         boolean flag = true;
         int userId = user.getId();
 
-
         try {
-            userService.saveUserInnerTable(userId);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        int idF = numOfFactor(userId);
-
-        while (flag) {
-
-            Products product = shop();
-            if (product == null)
-                System.out.println("this product is out of number,sorry");
-            else {
-                int idP = product.getId();
-                try {
-                    factorService.saveFactorInnerTable(idF, idP);
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }
+            try {
+                userService.saveUserInnerTable(userId);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
+            int idF = numOfFactor(userId);
+
+            while (flag) {
+
+                Products product = shop();
+                if (product == null)
+                    System.out.println("this product is out of number,sorry");
+                else {
+                    int idP = product.getId();
+                    try {
+                        factorService.saveFactorInnerTable(idF, idP);
+                    } catch (SQLException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+                System.out.println("do you want to see yor factor?(y,n)");
+                String seeFactor = getStringFromUser();
+                if (seeFactor.equals("y")) {
+                    showOneFactor(idF);
+                    System.out.println("do you want to delete from your factor?(y,n)");
+                    String deleteFromFactor = getStringFromUser();
+                    if (deleteFromFactor.equals("y")) {
+                        String nameOfDeletedProduct = deleteProductFromFactor();
+                        Products productDelete = null;
+                        try {
+                            productDelete = productService.findByName(nameOfDeletedProduct);
+                        } catch (SQLException e) {
+                            System.out.println(e.getMessage());
+                        }
+                        increaseNumOfProduct(productDelete);
+                    }
+                }
                 System.out.println("do you want more products(y,n)");
                 String choose = getStringFromUser();
 
@@ -200,6 +217,34 @@ public class Menu {
                     flag = false;
                 }
             }
+            showOneFactor(idF);
+            System.out.println("plz pay right now or you will die!");
+        }catch (NullPointerException e){
+            System.out.println(e.getMessage());
+        }
+        }
+        public void showOneFactor(int idF){
+            int [] productsId = null;
+            Products product = null;
+            int finalPrice = 0;
+            try {
+                productsId = factorService.productsOfOneFactor(idF);
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
+            System.out.println("your factor:");
+            for (int i = 0; i < productsId.length; i++) {
+                try {
+                    product = productService.findById(productsId[i]);
+                }catch (SQLException e){
+                    System.out.println(e.getMessage());
+                }
+                finalPrice += product.getPrice();
+                System.out.print("name: " + product.getProductName());
+                System.out.print("    price: " + product.getPrice());
+                System.out.println();
+            }
+            System.out.println("your final factor price is: " + finalPrice);
         }
 
 
@@ -281,6 +326,15 @@ public class Menu {
     }
     public void decreaseNumOfProduct(Products product){
         int newCount = product.getNumber() - 1;
+        String name = product.getProductName();
+        try {
+            productService.editProductNumber(name,newCount);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public void increaseNumOfProduct(Products product){
+        int newCount = product.getNumber() + 1;
         String name = product.getProductName();
         try {
             productService.editProductNumber(name,newCount);
@@ -885,13 +939,32 @@ public class Menu {
             editProductSubBranch();
         }
     }
+    public String deleteProductFromFactor(){
+        System.out.println("plz enter the name of product you want to delete");
+        String name = getStringFromUser();
 
+        Products product = null;
+        try{
+         product = productService.findByName(name);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        int productId = product.getId();
+        int deleteFactorProduct = 0;
+        try{
+            deleteFactorProduct = productService.deleteFromInnerTable(productId);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return name;
+    }
     public void deleteOneProduct() {
 
         showAllProducts();
 
-        System.out.println("plz enter the name of product you want to delete");
-        String name = getStringFromUser();
+        String name = deleteProductFromFactor();
+
         int deleteProduct = 0;
         try {
             deleteProduct = productService.delete(name);
