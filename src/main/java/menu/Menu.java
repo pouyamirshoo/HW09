@@ -505,13 +505,16 @@ public class Menu {
         try {
             System.out.println("plz check if there is any sub branch in product table first");
             System.out.println("is there any sub branch in product table?(y,n)");
-            int check = deleteOneSubBranchFromInnerTableCheck();
+
+
+            showAllProducts();
             String checkInput = getStringFromUser();
 
-            if (check != 0 && checkInput.equals("y")) {
-                deleteOneBranchFromInnerTable();
-            } else {
+            if (checkInput.equals("y")) {
+                deleteOneSubBranchFromInnerTableCheck();
                 deleteBranchCheck();
+            } else {
+                deleteOneBranchFromInnerTable();
             }
         } catch (NullPointerException e) {
             System.out.println(e.getMessage());
@@ -603,7 +606,7 @@ public class Menu {
         System.out.println("press 2 to edit branch");
         System.out.println("press 3 to back");
         int chooseEditSubBranch = getNumberFromUser();
-        if (chooseEditSubBranch > 2 || chooseEditSubBranch < 1) {
+        if (chooseEditSubBranch > 3 || chooseEditSubBranch < 1) {
             System.out.println("plz enter valid number");
             editSubBranch();
         }
@@ -704,7 +707,7 @@ public class Menu {
         }
     }
 
-    public int deleteOneSubBranchFromInnerTableCheck() {
+    public void deleteOneSubBranchFromInnerTableCheck() {
 
         showAllSubBranches();
 
@@ -723,7 +726,6 @@ public class Menu {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return check;
     }
 
     public void deleteOneSubBranch(String name) {
