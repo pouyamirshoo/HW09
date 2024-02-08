@@ -952,6 +952,7 @@ public class Menu {
             System.out.println(e.getMessage());
         }
 
+        assert product != null;
         int productId = product.getId();
         int deleteFactorProduct = 0;
         try{
